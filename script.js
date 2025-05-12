@@ -649,7 +649,7 @@ function verificarResposta(respostaSelecionada) {
       btn.disabled = true; // Desativa os botões após resposta
   });
 
-  if (respostaSelecionada === p.correta) {
+  if (respostaSelecionada === p.correta) {s
       pontuacao++;
   } else if (p.explicacao) {
       // Exibe a explicação caso o usuário erre
@@ -663,13 +663,20 @@ function verificarResposta(respostaSelecionada) {
     // Adiciona o botão "Próxima"
     const botaoProxima = document.createElement('button');
     botaoProxima.innerText = 'Próxima';
-    botaoProxima.style.marginTop = '20px';
+    botaoProxima.classList.add('botao-proxima');
+    botaoProxima.style.marginTop = '50px';
     botaoProxima.style.display = 'block';
+    botaoProxima.style.backgroundColor = '#007bff'; // Cor de fundo azul
+    botaoProxima.style.color = 'white'; // Cor do texto branca
+    botaoProxima.style.border = 'none'; // Remove a borda
+    botaoProxima.style.padding = '10px 20px'; // Adiciona espaçamento interno
+    botaoProxima.style.borderRadius = '5px'; // Bordas arredondadas
+    botaoProxima.style.cursor = 'pointer'; // Mostra o cursor de clique
     botaoProxima.onclick = () => {
-        perguntaAtual++;
-        mostrarPergunta();
-    };
-    opcoesDiv.appendChild(botaoProxima);
+    perguntaAtual++;
+    mostrarPergunta();
+};
+opcoesDiv.appendChild(botaoProxima);
 }
 
 // Função para mostrar o resultado final
