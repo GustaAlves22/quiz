@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz de Perguntas Gerais</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  
+  <div id="particles-js"></div>
+
+  <div id="tela-inicial" class="tela">
+    <h1>Quiz de Perguntas Gerais</h1>
+    <button onclick="mostrarCadastro()">Iniciar Quiz</button>
+    <button onclick="mostrarRanking()">Ver Ranking</button>
+  </div>
+
+  <div id="tela-cadastro" class="tela oculto">
+    <h2>Cadastro</h2>
+    <input id="nome" type="text" placeholder="Digite seu nome">
+    <input id="turma" type="text" placeholder="Digite sua turma">
+    <button onclick="iniciarComCadastro()">Iniciar Quiz</button>
+  </div>
+  
+  <div id="tela-temas" class="tela oculto">
+    <h2>Escolha o tema do Quiz</h2>
+    <div id="temas-container">
+      <button onclick="escolherTema('geografia')">Geografia</button>
+      <button onclick="escolherTema('historia')">História</button>
+      <button onclick="escolherTema('ciencia')">Ciências</button>
+      <button onclick="escolherTema('esportes')">Esportes</button>
+      <button onclick="escolherTema('cultura')">Cultura</button>
+      <button onclick="escolherTema('geral')">Geral</button>
+    </div>
+  </div>
+
+  <div id="tela-tipo-pergunta" class="tela oculto">
+    <h2>Escolha o tipo de pergunta</h2>
+    <select id="tipo-pergunta">
+      <option value="multipla">Múltipla Escolha</option>
+      <option value="verdadeiro-falso">Verdadeiro ou Falso</option>
+    </select>
+    <button onclick="iniciarQuiz()">Iniciar Quiz</button>
+  </div>
+
+  <div id="tela-quiz" class="tela oculto">
+    <div id="usuario-info"></div>
+    <div id="progresso"></div>
+    <h2 id="pergunta">Carregando pergunta...</h2>
+    <div id="opcoes"></div>
+  </div>
+
+  <div id="tela-resultado" class="tela oculto">
+    <h2>Resultado</h2>
+    <p id="mensagem-final"></p>
+    <p id="pontuacao-final"></p>
+    <button onclick="reiniciar()">Jogar Novamente</button>
+    <button onclick="voltarInicio()">Voltar ao Início</button>
+  </div>
+
+  <div id="tela-ranking" class="tela oculto">
+    <h2>Ranking</h2>
+    <ul id="lista-ranking"></ul>
+    <button onclick="voltarInicio()">Voltar</button>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

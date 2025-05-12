@@ -1,0 +1,734 @@
+// Variáveis globais
+let perguntas = []; // Armazena as 15 perguntas selecionadas aleatoriamente
+let perguntaAtual = 0;
+let pontuacao = 0;
+let nomeUsuario = '';
+let turmaUsuario = '';
+let temaSelecionado = '';
+let tipoPergunta = 'multipla'; // Valor padrão: Múltipla Escolha
+
+
+// Banco de Perguntas
+const bancoPerguntas = {
+  geografia: [
+    { pergunta: "Qual é a capital do Brasil?", correta: "Brasília", opcoes: ["São Paulo", "Rio de Janeiro", "Brasília", "Belo Horizonte"] },
+    { pergunta: "Qual é o maior oceano do mundo?", correta: "Pacífico", opcoes: ["Atlântico", "Índico", "Pacífico", "Ártico"] },
+    { pergunta: "Qual é o maior deserto do mundo?", correta: "Deserto do Saara", opcoes: ["Deserto de Atacama", "Deserto do Saara", "Deserto da Arábia", "Deserto de Gobi"] },
+    { pergunta: "Em que continente fica o Egito?", correta: "África", opcoes: ["África", "Ásia", "Europa", "América"] },
+    { pergunta: "Qual é o maior país do mundo?", correta: "Rússia", opcoes: ["Estados Unidos", "China", "Rússia", "Canadá"] },
+    { pergunta: "Qual é a capital da França?", correta: "Paris", opcoes: ["Roma", "Paris", "Berlim", "Madrid"] },
+    { pergunta: "Qual é a capital da Itália?", correta: "Roma", opcoes: ["Milão", "Roma", "Florença", "Veneza"] },
+    { pergunta: "Qual é o maior estado do Brasil em extensão territorial?", correta: "Amazonas", opcoes: ["São Paulo", "Minas Gerais", "Amazonas", "Bahia"] },
+    { pergunta: "Qual é o nome do maior rio do mundo?", correta: "Amazonas", opcoes: ["Nilo", "Amazonas", "Yangtze", "Mississippi"] },
+    { pergunta: "Qual é o nome do maior continente do mundo?", correta: "Ásia", opcoes: ["África", "América", "Ásia", "Europa"] },
+    { pergunta: "Qual é o menor país do mundo?", correta: "Vaticano", opcoes: ["Mônaco", "Vaticano", "Malta", "San Marino"] },
+    { pergunta: "Qual é o nome do maior deserto gelado do mundo?", correta: "Antártida", opcoes: ["Ártico", "Antártida", "Groenlândia", "Sibéria"] },
+    { pergunta: "Qual é o nome do maior arquipélago do mundo?", correta: "Indonésia", opcoes: ["Filipinas", "Maldivas", "Indonésia", "Japão"] },
+    { pergunta: "Qual é o nome do maior bioma brasileiro?", correta: "Amazônia", opcoes: ["Cerrado", "Amazônia", "Mata Atlântica", "Caatinga"] },
+    { pergunta: "Qual é o nome do maior lago da África?", correta: "Lago Vitória", opcoes: ["Lago Tanganica", "Lago Vitória", "Lago Niassa", "Lago Chade"] },
+    { pergunta: "Qual é o nome do maior rio da África?", correta: "Rio Nilo", opcoes: ["Rio Congo", "Rio Níger", "Rio Nilo", "Rio Zambeze"] },
+    { pergunta: "Qual é o nome do maior rio da América do Sul?", correta: "Amazonas", opcoes: ["Amazonas", "Nilo", "Mississippi", "Yangtze"] },
+    { pergunta: "Qual é o nome do maior golfo do mundo?", correta: "Golfo do México", opcoes: ["Golfo Pérsico", "Golfo do México", "Golfo de Bengala", "Golfo de Aden"] },
+    { pergunta: "Qual é o nome do maior vulcão ativo do mundo?", correta: "Mauna Loa", opcoes: ["Etna", "Krakatoa", "Mauna Loa", "Vesúvio"] },
+    { pergunta: "Qual é o nome do maior lago de água doce do mundo?", correta: "Lago Superior", opcoes: ["Lago Vitória", "Lago Baikal", "Lago Superior", "Lago de Genebra"] },
+    { pergunta: "Qual é o nome do maior sistema de recifes de coral do mundo?", correta: "Grande Barreira de Coral", opcoes: ["Recife de Belize", "Grande Barreira de Coral", "Recife de Apo", "Recife de Ningaloo"] },
+    { pergunta: "Qual é o nome do maior vulcão ativo do mundo?", correta: "Mauna Loa", opcoes: ["Etna", "Krakatoa", "Mauna Loa", "Vesúvio"] },
+    { pergunta: "Qual é o nome do maior deserto gelado do mundo?", correta: "Antártida", opcoes: ["Ártico", "Antártida", "Groenlândia", "Sibéria"] },
+    { pergunta: "Qual é o nome do maior rio do mundo?", correta: "Amazonas", opcoes: ["Nilo", "Amazonas", "Yangtze", "Mississippi"] },
+    { pergunta: "Qual é o nome do maior rio da África?", correta: "Rio Nilo", opcoes: ["Rio Congo", "Rio Níger", "Rio Nilo", "Rio Zambeze"] },
+    { pergunta: "Qual é o nome do maior continente do mundo?", correta: "Ásia", opcoes: ["África", "América", "Ásia", "Europa"] },
+    { pergunta: "Qual é o nome do maior deserto da Ásia?", correta: "Deserto de Gobi", opcoes: ["Deserto de Gobi", "Deserto da Arábia", "Deserto do Saara", "Deserto de Atacama"] },
+    { pergunta: "Qual é o nome do maior vulcão da Europa?", correta: "Monte Etna", opcoes: ["Monte Vesúvio", "Monte Etna", "Monte Kilimanjaro", "Monte Fuji"] },
+    { pergunta: "Qual é o nome do maior animal marinho?", correta: "Baleia Azul", opcoes: ["Tubarão Branco", "Baleia Azul", "Orca", "Golfinho"] },
+    { pergunta: "Qual é a capital da Austrália?", correta: "Camberra", opcoes: ["Sydney", "Melbourne", "Brisbane", "Camberra"] },
+    { pergunta: "Qual é o país com mais fronteiras terrestres no mundo?", correta: "China", opcoes: ["Rússia", "Brasil", "Alemanha", "China"] },
+    { pergunta: "Qual é o ponto mais alto do Brasil?", correta: "Pico da Neblina", opcoes: ["Pico da Bandeira", "Monte Roraima", "Pico das Agulhas Negras", "Pico da Neblina"] },
+    { pergunta: "Qual é o país mais populoso do mundo?", correta: "Índia", opcoes: ["China", "Índia", "Estados Unidos", "Indonésia"] },
+    { pergunta: "Qual é o menor continente do mundo em área?", correta: "Oceania", opcoes: ["Europa", "Antártida", "Oceania", "América do Sul"] },
+    { pergunta: "Em qual continente fica o Deserto do Kalahari?", correta: "África", opcoes: ["Ásia", "África", "América do Sul", "Oceania"] },
+    { pergunta: "Qual é o nome da cadeia de montanhas que atravessa a América do Sul?", correta: "Cordilheira dos Andes", opcoes: ["Cordilheira do Himalaia", "Montanhas Rochosas", "Cordilheira dos Andes", "Alpes"] },
+    { pergunta: "Qual é o país com o maior número de ilhas?", correta: "Suécia", opcoes: ["Indonésia", "Filipinas", "Canadá", "Suécia"] },
+    { pergunta: "Qual oceano banha a costa leste do Brasil?", correta: "Atlântico", opcoes: ["Atlântico", "Pacífico", "Índico", "Ártico"] },
+    { pergunta: "Qual é o país mais ocidental da Europa?", correta: "Portugal", opcoes: ["Irlanda", "França", "Espanha", "Portugal"] },
+    { pergunta: "Qual é o ponto mais alto do mundo?", correta: "Monte Everest", opcoes: ["Monte Everest", "Monte Fuji", "K2", "Aconcágua"] },
+    { pergunta: "Qual país é famoso por ter mais de 180 mil lagos?", correta: "Canadá", opcoes: ["Suécia", "Rússia", "Canadá", "Noruega"] },
+    { pergunta: "Qual é o nome da linha imaginária que divide o planeta em hemisférios norte e sul?", correta: "Linha do Equador", opcoes: ["Trópico de Câncer", "Meridiano de Greenwich", "Linha do Equador", "Trópico de Capricórnio"] },
+    { pergunta: "Qual é a capital do Canadá?", correta: "Ottawa", opcoes: ["Toronto", "Vancouver", "Ottawa", "Montreal"] },
+    { pergunta: "Em que país fica a Muralha da China?", correta: "China", opcoes: ["Japão", "Mongólia", "China", "Coreia do Sul"] },
+    { pergunta: "Qual é a capital da Argentina?", correta: "Buenos Aires", opcoes: ["Córdoba", "Rosário", "Buenos Aires", "Mendoza"] },
+    { pergunta: "Qual é o nome do relevo submarino mais profundo do planeta?", correta: "Fossa das Marianas", opcoes: ["Fossa de Java", "Fossa das Marianas", "Fossa do Atlântico", "Fossa das Aleutas"] },
+    { pergunta: "Qual país possui o maior litoral do mundo?", correta: "Canadá", opcoes: ["Brasil", "Austrália", "Indonésia", "Canadá"] },
+    { pergunta: "Qual é a capital do Japão?", correta: "Tóquio", opcoes: ["Kyoto", "Osaka", "Tóquio", "Hiroshima"] },
+    { pergunta: "Qual país é conhecido como a Terra dos Mil Lagos?", correta: "Finlândia", opcoes: ["Suécia", "Canadá", "Noruega", "Finlândia"] },
+    { pergunta: "Qual é a capital da Colômbia?", correta: "Bogotá", opcoes: ["Medellín", "Cali", "Bogotá", "Cartagena"] }
+],
+  historia: [
+    { pergunta: "Em que ano a Primeira Guerra Mundial começou?", correta: "1914", opcoes: ["1900", "1914", "1939", "1918"] },
+    { pergunta: "Quem foi o primeiro presidente dos Estados Unidos?", correta: "George Washington", opcoes: ["Abraham Lincoln", "Thomas Jefferson", "George Washington", "John Adams"] },
+    { pergunta: "Em que ano o Brasil foi descoberto?", correta: "1500", opcoes: ["1492", "1500", "1515", "1600"] },
+    { pergunta: "Quem foi o líder da Revolução Francesa?", correta: "Napoleão Bonaparte", opcoes: ["Louis XVI", "Maximilien Robespierre", "Napoleão Bonaparte", "Jean-Paul Marat"] },
+    { pergunta: "Quem foi o primeiro homem a pisar na lua?", correta: "Neil Armstrong", opcoes: ["Buzz Aldrin", "Yuri Gagarin", "Neil Armstrong", "Alan Shepard"] },
+    { pergunta: "Quem foi o criador da teoria da evolução das espécies?", correta: "Charles Darwin", opcoes: ["Albert Einstein", "Charles Darwin", "Galileu Galilei", "Louis Pasteur"] },
+    { pergunta: "Quem inventou o avião?", correta: "Irmãos Wright", opcoes: ["Irmãos Wright", "Alberto Santos Dumont", "Charles Lindbergh", "Gustave Whitehead"] },
+    { pergunta: "Quem foi o primeiro homem a viajar para o espaço?", correta: "Yuri Gagarin", opcoes: ["Neil Armstrong", "Buzz Aldrin", "Yuri Gagarin", "Alan Shepard"] },
+    { pergunta: "Quem foi o primeiro presidente do Brasil?", correta: "Marechal Deodoro da Fonseca", opcoes: ["Getúlio Vargas", "Juscelino Kubitschek", "Marechal Deodoro da Fonseca", "Fernando Henrique Cardoso"] },
+    { pergunta: "Quem foi o autor de 'Os Lusíadas'?", correta: "Luís de Camões", opcoes: ["Fernando Pessoa", "Luís de Camões", "Eça de Queirós", "José Saramago"] },
+    { pergunta: "Quem descobriu o Brasil?", correta: "Pedro Álvares Cabral", opcoes: ["Cristóvão Colombo", "Pedro Álvares Cabral", "Vasco da Gama", "Américo Vespúcio"] },
+    { pergunta: "Quem foi o autor de 'Dom Casmurro'?", correta: "Machado de Assis", opcoes: ["José de Alencar", "Machado de Assis", "Graciliano Ramos", "Jorge Amado"] },
+    { pergunta: "Quem foi o autor de 'O Pequeno Príncipe'?", correta: "Antoine de Saint-Exupéry", opcoes: ["Antoine de Saint-Exupéry", "Jules Verne", "Victor Hugo", "Marcel Proust"] },
+    { pergunta: "Quem foi o maior campeão mundial de boxe peso-pesado?", correta: "Muhammad Ali", opcoes: ["Mike Tyson", "Evander Holyfield", "Muhammad Ali", "George Foreman"] },
+    { pergunta: "Quem foi o líder da Revolução Russa?", correta: "Vladimir Lenin", opcoes: ["Joseph Stalin", "Vladimir Lenin", "Leon Trotsky", "Mikhail Gorbachev"] },
+    { pergunta: "Quem foi o famoso líder sul-africano que lutou contra o apartheid?", correta: "Nelson Mandela", opcoes: ["Nelson Mandela", "Desmond Tutu", "F.W. de Klerk", "Steve Biko"] },
+    { pergunta: "Quem foi o famoso líder cubano da Revolução Cubana?", correta: "Fidel Castro", opcoes: ["Che Guevara", "Fidel Castro", "Raúl Castro", "Hugo Chávez"] },
+    { pergunta: "Quem foi o famoso líder da Índia que pregou a não-violência?", correta: "Mahatma Gandhi", opcoes: ["Mahatma Gandhi", "Jawaharlal Nehru", "Indira Gandhi", "Nelson Mandela"] },
+    { pergunta: "Qual civilização antiga construiu as pirâmides do Egito?", correta: "Egípcia", opcoes: ["Egípcia", "Grega", "Romana", "Mesopotâmica"] },
+    { pergunta: "Qual império foi governado por Júlio César?", correta: "Império Romano", opcoes: ["Império Romano", "Império Bizantino", "Império Otomano", "Império Persa"] },
+    { pergunta: "Quem foi o imperador francês que ficou famoso por suas conquistas militares?", correta: "Napoleão Bonaparte", opcoes: ["Luís XIV", "Carlos Magno", "Napoleão Bonaparte", "Robespierre"] },
+    { pergunta: "Em que continente ocorreu o apartheid?", correta: "África", opcoes: ["África", "América", "Europa", "Ásia"] },
+    { pergunta: "Qual cidade foi bombardeada em 1945 junto com Hiroshima?", correta: "Nagasaki", opcoes: ["Tóquio", "Osaka", "Nagasaki", "Kyoto"] },
+    { pergunta: "Qual país iniciou a Revolução Industrial?", correta: "Inglaterra", opcoes: ["França", "Alemanha", "Inglaterra", "Estados Unidos"] },
+    { pergunta: "Qual tratado marcou o fim da Primeira Guerra Mundial?", correta: "Tratado de Versalhes", opcoes: ["Tratado de Paris", "Tratado de Versalhes", "Tratado de Roma", "Tratado de Genebra"] },
+    { pergunta: "Qual era o nome da aliança liderada pelos EUA durante a Guerra Fria?", correta: "OTAN", opcoes: ["OTAN", "Pacto de Varsóvia", "Liga das Nações", "ONU"] },
+    { pergunta: "Qual país foi dividido em Oriental e Ocidental após a Segunda Guerra Mundial?", correta: "Alemanha", opcoes: ["Alemanha", "França", "Polônia", "Itália"] },
+    { pergunta: "Qual era o nome do muro que dividia Berlim?", correta: "Muro de Berlim", opcoes: ["Muro de Berlim", "Muro da Vergonha", "Muro de Ferro", "Muro da Guerra"] },
+    { pergunta: "Qual civilização antiga é conhecida por sua filosofia e democracia?", correta: "Grega", opcoes: ["Egípcia", "Romana", "Grega", "Chinesa"] },
+    { pergunta: "Quem foi o líder alemão durante a Segunda Guerra Mundial?", correta: "Adolf Hitler", opcoes: ["Adolf Hitler", "Benito Mussolini", "Joseph Stalin", "Winston Churchill"] },
+    { pergunta: "Qual era o nome do navio que afundou em 1912 após bater em um iceberg?", correta: "Titanic", opcoes: ["Titanic", "Britannic", "Olympic", "Lusitania"] },
+    { pergunta: "Qual evento histórico é marcado pela queda da Bastilha?", correta: "Revolução Francesa", opcoes: ["Revolução Francesa", "Revolução Russa", "Unificação Italiana", "Independência dos EUA"] },
+    { pergunta: "Quem foi o rei francês conhecido como 'Rei Sol'?", correta: "Luís XIV", opcoes: ["Luís XIV", "Luís XVI", "Carlos V", "Henrique VIII"] },
+    { pergunta: "Qual civilização é conhecida por desenvolver a escrita cuneiforme?", correta: "Mesopotâmica", opcoes: ["Egípcia", "Mesopotâmica", "Chinesa", "Grega"] },
+    { pergunta: "Quem foi o principal responsável pela unificação da Alemanha no século XIX?", correta: "Otto von Bismarck", opcoes: ["Adolf Hitler", "Otto von Bismarck", "Wilhelm II", "Kaiser Franz"] },
+    { pergunta: "Em que ano aconteceu a queda do Muro de Berlim?", correta: "1989", opcoes: ["1980", "1985", "1989", "1991"] },
+    { pergunta: "Qual civilização pré-colombiana construiu Machu Picchu?", correta: "Inca", opcoes: ["Asteca", "Maya", "Inca", "Olmeca"] },
+    { pergunta: "Qual era o nome do plano econômico dos EUA para reconstruir a Europa após a Segunda Guerra?", correta: "Plano Marshall", opcoes: ["Plano Marshall", "Plano Truman", "Plano Kennedy", "Plano Roosevelt"] },
+    { pergunta: "Qual revolução marcou o fim da monarquia absolutista na Rússia?", correta: "Revolução Russa de 1917", opcoes: ["Revolução Russa de 1905", "Revolução Francesa", "Revolução Russa de 1917", "Revolução Industrial"] },
+    { pergunta: "Qual civilização construiu as cidades de Tenochtitlán e Teotihuacán?", correta: "Asteca", opcoes: ["Maya", "Inca", "Asteca", "Zapoteca"] },
+    { pergunta: "Quem foi o famoso navegador português que chegou à Índia em 1498?", correta: "Vasco da Gama", opcoes: ["Pedro Álvares Cabral", "Cristóvão Colombo", "Fernão de Magalhães", "Vasco da Gama"] },
+    { pergunta: "Qual foi o movimento que aboliu a escravidão no Brasil?", correta: "Abolicionismo", opcoes: ["Iluminismo", "Abolicionismo", "Liberalismo", "Federalismo"] },
+    { pergunta: "Quem era o imperador do Brasil quando foi proclamada a independência?", correta: "Dom Pedro I", opcoes: ["Dom João VI", "Dom Pedro I", "Dom Pedro II", "Marquês de Pombal"] },
+    { pergunta: "Qual evento histórico marcou o início da Idade Moderna?", correta: "A tomada de Constantinopla", opcoes: ["A descoberta da América", "A queda do Império Romano", "A tomada de Constantinopla", "A Revolução Francesa"] },
+    { pergunta: "Quem foi o famoso artista renascentista que pintou a Capela Sistina?", correta: "Michelangelo", opcoes: ["Leonardo da Vinci", "Michelangelo", "Rafael", "Donatello"] },
+    { pergunta: "Que país foi colonizado principalmente por espanhóis na América do Sul?", correta: "Peru", opcoes: ["Brasil", "Peru", "Canadá", "Jamaica"] },
+    { pergunta: "Qual foi a primeira capital do Brasil?", correta: "Salvador", opcoes: ["Rio de Janeiro", "Brasília", "Salvador", "Recife"] },
+    { pergunta: "Quem foi o presidente do Brasil durante a proclamação da República?", correta: "Não havia presidente ainda", opcoes: ["Floriano Peixoto", "Deodoro da Fonseca", "Dom Pedro II", "Não havia presidente ainda"] },
+    { pergunta: "Qual foi o império que teve Constantinopla como capital?", correta: "Império Bizantino", opcoes: ["Império Romano", "Império Bizantino", "Império Otomano", "Império Persa"] },
+    { pergunta: "Que civilização antiga é famosa por seu sistema de aquedutos e estradas?", correta: "Romana", opcoes: ["Grega", "Egípcia", "Romana", "Chinesa"] }
+],
+  ciencia: [
+    { pergunta: "Qual é o nome do maior animal terrestre?", correta: "Elefante", opcoes: ["Elefante", "Girafa", "Rinoceronte", "Hipopótamo"] },
+    { pergunta: "Quem foi o criador da teoria da evolução das espécies?", correta: "Charles Darwin", opcoes: ["Albert Einstein", "Charles Darwin", "Galileu Galilei", "Louis Pasteur"] },
+    { pergunta: "Qual é o símbolo químico do ouro?", correta: "Au", opcoes: ["Ag", "Fe", "Au", "Cu"] },
+    { pergunta: "Qual é o elemento químico mais abundante no universo?", correta: "Hidrogênio", opcoes: ["Oxigênio", "Carbono", "Hidrogênio", "Hélio"] },
+    { pergunta: "Qual é o nome do maior mamífero do mundo?", correta: "Baleia Azul", opcoes: ["Elefante Africano", "Baleia Azul", "Orca", "Tubarão Baleia"] },
+    { pergunta: "Qual é o nome do maior órgão do corpo humano?", correta: "Pele", opcoes: ["Fígado", "Pele", "Coração", "Pulmão"] },
+    { pergunta: "Qual é o nome do maior osso do corpo humano?", correta: "Fêmur", opcoes: ["Fêmur", "Tíbia", "Úmero", "Crânio"] },
+    { pergunta: "Qual é o nome do processo pelo qual as plantas produzem energia?", correta: "Fotossíntese", opcoes: ["Respiração", "Fotossíntese", "Fermentação", "Oxidação"] },
+    { pergunta: "Qual é o nome do maior satélite natural da Terra?", correta: "Lua", opcoes: ["Marte", "Lua", "Vênus", "Júpiter"] },
+    { pergunta: "Qual é o nome do maior planeta do sistema solar?", correta: "Júpiter", opcoes: ["Terra", "Marte", "Saturno", "Júpiter"] },
+    { pergunta: "Qual é o nome do planeta conhecido como 'Planeta Vermelho'?", correta: "Marte", opcoes: ["Vênus", "Marte", "Júpiter", "Saturno"] },
+    { pergunta: "Qual é o nome do processo de formação de novas espécies?", correta: "Especiação", opcoes: ["Evolução", "Especiação", "Seleção natural", "Mutação"] },
+    { pergunta: "Qual é o nome do processo de formação de rochas a partir de sedimentos?", correta: "Sedimentação", opcoes: ["Cristalização", "Sedimentação", "Metamorfismo", "Erosão"] },
+    { pergunta: "Qual é o nome do processo de transformação de lagarta em borboleta?", correta: "Metamorfose", opcoes: ["Fotossíntese", "Metamorfose", "Germinação", "Polinização"] },
+    { pergunta: "Qual é a unidade básica da vida?", correta: "Célula", opcoes: ["Molécula", "Célula", "Átomo", "Organelo"] },
+    { pergunta: "Qual é o planeta mais próximo do Sol?", correta: "Mercúrio", opcoes: ["Vênus", "Terra", "Marte", "Mercúrio"] },
+    { pergunta: "O que mede um barômetro?", correta: "Pressão atmosférica", opcoes: ["Temperatura", "Pressão atmosférica", "Umidade", "Velocidade do vento"] },
+    { pergunta: "O que é a mitocôndria conhecida como?", correta: "Usina de energia da célula", opcoes: ["Centro de comando", "Usina de energia da célula", "Armazém da célula", "Sistema de defesa"] },
+    { pergunta: "Qual gás é essencial para a respiração celular?", correta: "Oxigênio", opcoes: ["Gás carbônico", "Hidrogênio", "Oxigênio", "Nitrogênio"] },
+    { pergunta: "Qual é o estado físico da água a 100°C ao nível do mar?", correta: "Gasoso", opcoes: ["Sólido", "Líquido", "Gasoso", "Plasma"] },
+    { pergunta: "Qual o nome da ciência que estuda os seres vivos?", correta: "Biologia", opcoes: ["Física", "Biologia", "Química", "Astronomia"] },
+    { pergunta: "O que é DNA?", correta: "Material genético", opcoes: ["Tipo de proteína", "Enzima", "Material genético", "Hormônio"] },
+    { pergunta: "Qual é o cientista famoso por suas leis do movimento?", correta: "Isaac Newton", opcoes: ["Albert Einstein", "Isaac Newton", "Galileu Galilei", "Stephen Hawking"] },
+    { pergunta: "Qual é a camada mais externa da Terra?", correta: "Crosta", opcoes: ["Manto", "Crosta", "Núcleo externo", "Núcleo interno"] },
+    { pergunta: "Qual planeta tem o maior número de luas?", correta: "Saturno", opcoes: ["Terra", "Marte", "Júpiter", "Saturno"] },
+    { pergunta: "Qual é o nome da força que nos mantém presos à Terra?", correta: "Gravidade", opcoes: ["Magnetismo", "Gravidade", "Pressão", "Inércia"] },
+    { pergunta: "Qual instrumento é usado para medir temperatura?", correta: "Termômetro", opcoes: ["Anemômetro", "Termômetro", "Barômetro", "Higrômetro"] },
+    { pergunta: "Qual é o nome da camada da atmosfera onde ocorre a maioria dos fenômenos climáticos?", correta: "Troposfera", opcoes: ["Estratosfera", "Troposfera", "Mesosfera", "Termosfera"] },
+    { pergunta: "Qual desses animais é um invertebrado?", correta: "Polvo", opcoes: ["Cavalo", "Papagaio", "Polvo", "Cachorro"] },
+    { pergunta: "Qual o nome da camada protetora que envolve a Terra e filtra os raios UV?", correta: "Camada de ozônio", opcoes: ["Troposfera", "Camada de ozônio", "Atmosfera", "Estratosfera"] },
+    { pergunta: "Qual é o pH da água pura?", correta: "7", opcoes: ["5", "6", "7", "8"] },
+    { pergunta: "Qual é o nome da substância responsável pela cor da pele?", correta: "Melanina", opcoes: ["Clorofila", "Melanina", "Hemoglobina", "Colágeno"] },
+    { pergunta: "Qual é a principal função dos glóbulos vermelhos?", correta: "Transportar oxigênio", opcoes: ["Defender o corpo", "Produzir hormônios", "Transportar oxigênio", "Formar coágulos"] },
+    { pergunta: "Qual é o nome da ciência que estuda os corpos celestes?", correta: "Astronomia", opcoes: ["Biologia", "Astrologia", "Astronomia", "Geologia"] },
+    { pergunta: "Qual é o metal líquido à temperatura ambiente?", correta: "Mercúrio", opcoes: ["Chumbo", "Ferro", "Mercúrio", "Cobre"] },
+    { pergunta: "Qual planeta é conhecido por seus anéis?", correta: "Saturno", opcoes: ["Urano", "Júpiter", "Saturno", "Netuno"] },
+    { pergunta: "Como é chamado o processo em que a água passa do estado líquido para o gasoso?", correta: "Evaporação", opcoes: ["Condensação", "Sublimação", "Evaporação", "Fusão"] },
+    { pergunta: "O que é clorofila?", correta: "Pigmento verde das plantas", opcoes: ["Hormônio vegetal", "Pigmento verde das plantas", "Tipo de célula", "Gás fotossintético"] },
+    { pergunta: "Quantos cromossomos tem um ser humano saudável?", correta: "46", opcoes: ["44", "46", "48", "23"] },
+    { pergunta: "Qual gás é usado pelas plantas durante a fotossíntese?", correta: "Gás carbônico", opcoes: ["Oxigênio", "Gás carbônico", "Hidrogênio", "Nitrogênio"] },
+    { pergunta: "Qual é a fonte primária de energia para a Terra?", correta: "Sol", opcoes: ["Petróleo", "Sol", "Vento", "Eletricidade"] },
+    { pergunta: "O que é um ecossistema?", correta: "Conjunto de seres vivos e ambiente", opcoes: ["Grupo de animais", "Tipo de clima", "Conjunto de seres vivos e ambiente", "Área florestal"] },
+    { pergunta: "Qual parte do olho humano é responsável pela percepção de luz?", correta: "Retina", opcoes: ["Córnea", "Retina", "Cristalino", "Íris"] },
+    { pergunta: "Qual órgão é responsável por bombear o sangue?", correta: "Coração", opcoes: ["Pulmão", "Coração", "Fígado", "Estômago"] },
+    { pergunta: "Qual parte da planta absorve água e sais minerais do solo?", correta: "Raiz", opcoes: ["Caule", "Raiz", "Folha", "Flor"] },
+    { pergunta: "Qual é o nome do músculo responsável pela respiração?", correta: "Diafragma", opcoes: ["Tríceps", "Diafragma", "Peitoral", "Abdominal"] },
+    { pergunta: "Como se chama o movimento da Terra em torno do Sol?", correta: "Translação", opcoes: ["Rotação", "Translação", "Revolução", "Orbitação"] },
+    { pergunta: "O que acontece com a luz ao passar por um prisma?", correta: "Ela se divide em várias cores", opcoes: ["É absorvida", "Fica invisível", "Ela se divide em várias cores", "Se aquece"] },
+    { pergunta: "Qual é o nome da proteína presente nos cabelos e unhas?", correta: "Queratina", opcoes: ["Melanina", "Colágeno", "Queratina", "Elastina"] },
+    { pergunta: "O que é um vertebrado?", correta: "Animal com coluna vertebral", opcoes: ["Animal com asas", "Animal com coluna vertebral", "Animal aquático", "Animal com sangue frio"] }
+],
+  esportes: [
+    { pergunta: "Quem perdeu um pênalti na final da Copa de 1994?", correta: "Roberto Baggio", opcoes: ["Romário", "Bebeto", "Roberto Baggio", "Zidane"] },
+    { pergunta: "Quem foi campeão da Copa do Mundo de 2006?", correta: "Itália", opcoes: ["França", "Itália", "Alemanha", "Brasil"] },
+    { pergunta: "Quem é o jogador com mais gols na história da Copa do Mundo?", correta: "Klose", opcoes: ["Pelé", "Klose", "Cristiano Ronaldo", "Kaká"] },
+    { pergunta: "Qual é o time de futebol com mais títulos da Champions League?", correta: "Real Madrid", opcoes: ["Barcelona", "Bayern de Munique", "Real Madrid", "Liverpool"] },
+    { pergunta: "Qual é o time de futebol que tem a maior torcida do Brasil?", correta: "Flamengo", opcoes: ["São Paulo", "Corinthians", "Flamengo", "Vasco da Gama"] },
+    { pergunta: "Quem perdeu um pênalti na final da Copa de 1994?", correta: "Roberto Baggio", opcoes: ["Romário", "Bebeto", "Roberto Baggio", "Zidane"] },
+    { pergunta: "Qual é o único país que participou de todas as Copas do Mundo?", correta: "Brasil", opcoes: ["Alemanha", "Argentina", "Brasil", "Itália"] },
+    { pergunta: "Qual clube brasileiro é conhecido como 'Timão'?", correta: "Corinthians", opcoes: ["Palmeiras", "São Paulo", "Corinthians", "Santos"] },
+    { pergunta: "Quem é conhecido como o 'Rei do Futebol'?", correta: "Pelé", opcoes: ["Pelé", "Garrincha", "Zico", "Romário"] },
+    { pergunta: "Em qual país foi realizada a Copa do Mundo de 2018?", correta: "Rússia", opcoes: ["Brasil", "Rússia", "Alemanha", "Catar"] },
+    { pergunta: "Qual jogador é apelidado de 'Fenômeno'?", correta: "Ronaldo", opcoes: ["Ronaldinho", "Ronaldo", "Romário", "Kaká"] },
+    { pergunta: "Qual jogador tem mais gols na história da Seleção Brasileira?", correta: "Pelé", opcoes: ["Pelé", "Neymar", "Zico", "Romário"] },
+    { pergunta: "Qual atleta ganhou mais medalhas olímpicas da história?", correta: "Michael Phelps", opcoes: ["Usain Bolt", "Michael Phelps", "Carl Lewis", "Mark Spitz"] },
+    { pergunta: "Qual é o apelido do lutador Anderson Silva?", correta: "The Spider", opcoes: ["The Beast", "The Spider", "The Phenom", "The Machine"] },
+    { pergunta: "Qual país é mais vitorioso no basquete olímpico?", correta: "Estados Unidos", opcoes: ["Espanha", "Argentina", "Estados Unidos", "Lituânia"] },
+    { pergunta: "Qual é o Grand Slam mais antigo do tênis?", correta: "Wimbledon", opcoes: ["US Open", "Roland Garros", "Wimbledon", "Australian Open"] },
+    { pergunta: "Em qual esporte a Rayssa Leal pratica?", correta: "Skate", opcoes: ["Patinação", "Skate", "Ciclismo", "Atletismo"] },
+    { pergunta: "Quem foi campeão da Fórmula 1 em 2021?", correta: "Max Verstappen", opcoes: ["Lewis Hamilton", "Max Verstappen", "Sebastian Vettel", "Charles Leclerc"] },
+    { pergunta: "Qual time venceu a Libertadores de 2021?", correta: "Palmeiras", opcoes: ["Flamengo", "Palmeiras", "Atlético-MG", "River Plate"] },
+    { pergunta: "Qual esporte é jogado com uma peteca?", correta: "Badminton", opcoes: ["Squash", "Tênis", "Badminton", "Handebol"] },
+    { pergunta: "Qual jogador brasileiro é apelidado de 'Gaúcho'?", correta: "Ronaldinho", opcoes: ["Ronaldinho", "Romário", "Cafu", "Zico"] },
+    { pergunta: "Qual esporte tem um movimento chamado 'ippon'?", correta: "Judô", opcoes: ["Karatê", "Judô", "Taekwondo", "Capoeira"] },
+    { pergunta: "Quantos jogadores cada time tem no voleibol em quadra?", correta: "6", opcoes: ["5", "6", "7", "8"] },
+    { pergunta: "Qual país venceu a Copa do Mundo de Futebol Feminino em 2019?", correta: "Estados Unidos", opcoes: ["Alemanha", "Brasil", "Estados Unidos", "França"] },
+    { pergunta: "Quem é o maior artilheiro da história da Champions League?", correta: "Cristiano Ronaldo", opcoes: ["Cristiano Ronaldo", "Messi", "Lewandowski", "Benzema"] },
+    { pergunta: "Qual é o nome da liga de futebol dos EUA?", correta: "MLS", opcoes: ["USFL", "MLS", "NFL", "USML"] },
+    { pergunta: "Qual é a principal competição de clubes da América do Sul?", correta: "Copa Libertadores", opcoes: ["Copa Sul-Americana", "Brasileirão", "Copa Libertadores", "Recopa"] },
+    { pergunta: "Em que país está localizado o Circuito de Interlagos?", correta: "Brasil", opcoes: ["Brasil", "Argentina", "Espanha", "México"] },
+    { pergunta: "Quem foi o maior campeão mundial de boxe peso-pesado?", correta: "Muhammad Ali", opcoes: ["Mike Tyson", "Evander Holyfield", "Muhammad Ali", "George Foreman"] },
+    { pergunta: "Qual país sediou as Olimpíadas de 2016?", correta: "Brasil", opcoes: ["China", "Brasil", "Grécia", "Reino Unido"] },
+    { pergunta: "Quem é o camisa 10 histórico do Santos?", correta: "Pelé", opcoes: ["Pelé", "Robinho", "Neymar", "Diego"] },
+    { pergunta: "Qual esporte usa o termo 'strike'?", correta: "Boliche", opcoes: ["Tênis", "Golfe", "Boliche", "Críquete"] },
+    { pergunta: "Qual é o esporte praticado por Gabriel Medina?", correta: "Surfe", opcoes: ["Surfe", "Skate", "Natação", "Windsurf"] },
+    { pergunta: "Qual jogador é conhecido como 'Imperador'?", correta: "Adriano", opcoes: ["Adriano", "Kaká", "Ronaldinho", "Fred"] },
+    { pergunta: "Qual seleção venceu a Eurocopa de 2020 (realizada em 2021)?", correta: "Itália", opcoes: ["Inglaterra", "França", "Itália", "Alemanha"] },
+    { pergunta: "Qual clube é conhecido como 'Galo'?", correta: "Atlético Mineiro", opcoes: ["Atlético Paranaense", "Atlético Mineiro", "Goiás", "Bahia"] },
+    { pergunta: "Qual clube venceu a primeira Copa do Mundo de Clubes da FIFA?", correta: "Corinthians", opcoes: ["Real Madrid", "Boca Juniors", "Corinthians", "Liverpool"] },
+    { pergunta: "Quantos minutos dura uma partida oficial de futebol?", correta: "90 minutos", opcoes: ["60 minutos", "90 minutos", "80 minutos", "100 minutos"] },
+    { pergunta: "Quantos pontos vale uma cesta de três no basquete?", correta: "3 pontos", opcoes: ["1 ponto", "2 pontos", "3 pontos", "4 pontos"] },
+    { pergunta: "Em qual país nasceu o futebol moderno?", correta: "Inglaterra", opcoes: ["Brasil", "Alemanha", "Inglaterra", "Itália"] },
+    { pergunta: "Em qual esporte se usa uma vara para saltar?", correta: "Salto com vara", opcoes: ["Salto triplo", "Salto em altura", "Salto com vara", "Decatlo"] },
+    { pergunta: "Qual tenista tem mais títulos de Grand Slam até 2023?", correta: "Novak Djokovic", opcoes: ["Roger Federer", "Rafael Nadal", "Novak Djokovic", "Andy Murray"] },
+    { pergunta: "Em que esporte se destacou o atleta Marat Safin?", correta: "Tênis", opcoes: ["Tênis", "Xadrez", "Golfe", "Boxe"] },
+    { pergunta: "Qual país venceu a Copa do Mundo Sub-20 de 2023?", correta: "Uruguai", opcoes: ["Brasil", "Uruguai", "Itália", "Nigéria"] },
+    { pergunta: "Qual é o nome da principal liga de basquete dos EUA?", correta: "NBA", opcoes: ["NFL", "MLB", "NBA", "MLS"] },
+    { pergunta: "Quem foi o maior goleador da história do Campeonato Brasileiro até 2023?", correta: "Roberto Dinamite", opcoes: ["Zico", "Fred", "Romário", "Roberto Dinamite"] },
+    { pergunta: "Qual é o esporte olímpico que combina esqui e tiro ao alvo?", correta: "Biathlon", opcoes: ["Triatlo", "Pentatlo moderno", "Biathlon", "Decatlo"] },
+    { pergunta: "Qual jogador brasileiro é conhecido pelo apelido 'O Animal'?", correta: "Edmundo", opcoes: ["Romário", "Edmundo", "Túlio", "Viola"] },
+    { pergunta: "Quantas voltas tem uma corrida oficial de Fórmula 1, em média?", correta: "Entre 50 e 70", opcoes: ["30", "40", "Entre 50 e 70", "Mais de 100"] },
+    { pergunta: "Em que país foi fundada a Confederação Brasileira de Futebol (CBF)?", correta: "Brasil", opcoes: ["Argentina", "Portugal", "Brasil", "Uruguai"] },
+    { pergunta: "Qual país sediou os Jogos Olímpicos de Inverno de 2022?", correta: "China", opcoes: ["Japão", "Canadá", "Noruega", "China"] }
+  ],
+  cultura: [
+    { pergunta: "Quem pintou a Mona Lisa?", correta: "Leonardo da Vinci", opcoes: ["Pablo Picasso", "Vincent van Gogh", "Leonardo da Vinci", "Claude Monet"] },
+    { pergunta: "Quem escreveu 'Dom Quixote'?", correta: "Miguel de Cervantes", opcoes: ["Gabriel García Márquez", "Jorge Luis Borges", "Miguel de Cervantes", "William Shakespeare"] },
+    { pergunta: "Quem escreveu a obra 'Romeu e Julieta'?", correta: "William Shakespeare", opcoes: ["Mark Twain", "Jane Austen", "William Shakespeare", "Charles Dickens"] },
+    { pergunta: "Quem pintou o teto da Capela Sistina?", correta: "Michelangelo", opcoes: ["Leonardo da Vinci", "Raphael", "Michelangelo", "Donatello"] },
+    { pergunta: "Quem foi o autor de 'Os Lusíadas'?", correta: "Luís de Camões", opcoes: ["Fernando Pessoa", "Luís de Camões", "Eça de Queirós", "José Saramago"] },
+    { pergunta: "Quem escreveu '1984'?", correta: "George Orwell", opcoes: ["Aldous Huxley", "Ray Bradbury", "George Orwell", "Isaac Asimov"] },
+    { pergunta: "Quem foi o autor de 'Dom Casmurro'?", correta: "Machado de Assis", opcoes: ["José de Alencar", "Machado de Assis", "Graciliano Ramos", "Jorge Amado"] },
+    { pergunta: "Quem foi o autor de 'O Pequeno Príncipe'?", correta: "Antoine de Saint-Exupéry", opcoes: ["Antoine de Saint-Exupéry", "Jules Verne", "Victor Hugo", "Marcel Proust"] },
+    { pergunta: "Quem pintou 'Guernica'?", correta: "Pablo Picasso", opcoes: ["Salvador Dalí", "Pablo Picasso", "Joan Miró", "Diego Rivera"] },
+    { pergunta: "Qual é o nome do famoso pintor holandês de 'Noite Estrelada'?", correta: "Vincent van Gogh", opcoes: ["Pablo Picasso", "Vincent van Gogh", "Claude Monet", "Salvador Dalí"] },
+    { pergunta: "Qual é o nome do famoso quadro de Leonardo da Vinci que representa a Última Ceia?", correta: "A Última Ceia", opcoes: ["Mona Lisa", "A Última Ceia", "A Criação de Adão", "A Escola de Atenas"] },
+    { pergunta: "Qual é o nome do famoso compositor de 'As Quatro Estações'?", correta: "Antonio Vivaldi", opcoes: ["Antonio Vivaldi", "Johann Sebastian Bach", "Ludwig van Beethoven", "Wolfgang Amadeus Mozart"] },
+    { pergunta: "Quem compôs a Nona Sinfonia?", correta: "Ludwig van Beethoven", opcoes: ["Wolfgang Amadeus Mozart", "Johann Sebastian Bach", "Ludwig van Beethoven", "Pyotr Ilyich Tchaikovsky"] },
+    { pergunta: "Qual é o nome do famoso compositor de 'A Flauta Mágica'?", correta: "Wolfgang Amadeus Mozart", opcoes: ["Ludwig van Beethoven", "Wolfgang Amadeus Mozart", "Johann Sebastian Bach", "Richard Wagner"] },
+    { pergunta: "Qual é o nome do famoso festival de música realizado em Woodstock em 1969?", correta: "Woodstock Music Festival", opcoes: ["Coachella", "Glastonbury", "Woodstock Music Festival", "Lollapalooza"] },
+    { pergunta: "Qual é o nome do famoso filme de Stanley Kubrick sobre o espaço?", correta: "2001: Uma Odisseia no Espaço", opcoes: ["Interstellar", "2001: Uma Odisseia no Espaço", "Gravidade", "Apollo 13"] },
+    { pergunta: "Qual é o nome do famoso escritor russo de 'Guerra e Paz'?", correta: "Liev Tolstói", opcoes: ["Fiódor Dostoiévski", "Liev Tolstói", "Anton Tchekhov", "Vladimir Nabokov"] },
+    { pergunta: "Qual é o nome do famoso escritor de 'O Senhor dos Anéis'?", correta: "J.R.R. Tolkien", opcoes: ["J.K. Rowling", "J.R.R. Tolkien", "George R.R. Martin", "C.S. Lewis"] },
+    { pergunta: "Qual é o nome do famoso detective criado por Arthur Conan Doyle?", correta: "Sherlock Holmes", opcoes: ["Sherlock Holmes", "Hercule Poirot", "Miss Marple", "Philip Marlowe"] },
+    { pergunta: "Qual é o nome do famoso discurso de Martin Luther King Jr.?", correta: "I Have a Dream", opcoes: ["I Have a Dream", "Gettysburg Address", "The Ballot or the Bullet", "We Shall Overcome"] },
+    { pergunta: "Qual é o nome da famosa pintura de Edvard Munch que representa uma figura angustiada?", correta: "O Grito", opcoes: ["Noite Estrelada", "O Grito", "Guernica", "A Persistência da Memória"] },
+    { pergunta: "Qual é o nome do deus romano da guerra?", correta: "Marte", opcoes: ["Júpiter", "Marte", "Netuno", "Plutão"] },
+    { pergunta: "Qual é o nome da tradicional festa brasileira que acontece em junho?", correta: "Festa Junina", opcoes: ["Carnaval", "Festa Junina", "Réveillon", "Corpus Christi"] },
+    { pergunta: "Quem é o autor da obra 'Capitães da Areia'?", correta: "Jorge Amado", opcoes: ["Jorge Amado", "Machado de Assis", "Carlos Drummond de Andrade", "Graciliano Ramos"] },
+    { pergunta: "Qual país é conhecido como o berço do samba?", correta: "Brasil", opcoes: ["Cuba", "Brasil", "Argentina", "Portugal"] },
+    { pergunta: "Qual é o nome da religião afro-brasileira que mistura elementos africanos e católicos?", correta: "Candomblé", opcoes: ["Candomblé", "Budismo", "Islamismo", "Hinduísmo"] },
+    { pergunta: "Qual é o nome da dança típica espanhola conhecida por seu ritmo intenso?", correta: "Flamenco", opcoes: ["Tango", "Samba", "Flamenco", "Salsa"] },
+    { pergunta: "Qual é o nome do principal prêmio do cinema mundial?", correta: "Oscar", opcoes: ["Globo de Ouro", "BAFTA", "César", "Oscar"] },
+    { pergunta: "Qual cidade é famosa por seu carnaval com escolas de samba?", correta: "Rio de Janeiro", opcoes: ["Salvador", "Recife", "São Paulo", "Rio de Janeiro"] },
+    { pergunta: "Qual escritor brasileiro é conhecido por sua obra 'Grande Sertão: Veredas'?", correta: "João Guimarães Rosa", opcoes: ["José de Alencar", "João Guimarães Rosa", "Jorge Amado", "Carlos Drummond de Andrade"] },
+    { pergunta: "Qual artista é conhecido por pintar relógios derretendo?", correta: "Salvador Dalí", opcoes: ["Pablo Picasso", "René Magritte", "Salvador Dalí", "Joan Miró"] },
+    { pergunta: "Qual é o nome do maior evento de premiação da música?", correta: "Grammy", opcoes: ["MTV Awards", "Grammy", "Billboard Music Awards", "American Music Awards"] },
+    { pergunta: "Qual famoso autor brasileiro escreveu 'Vidas Secas'?", correta: "Graciliano Ramos", opcoes: ["Monteiro Lobato", "Graciliano Ramos", "Érico Veríssimo", "Jorge Amado"] },
+    { pergunta: "Qual é o nome do estilo arquitetônico das grandes catedrais medievais europeias?", correta: "Gótico", opcoes: ["Gótico", "Barroco", "Renascentista", "Neoclássico"] },
+    { pergunta: "Qual é o nome do famoso quadro de René Magritte com um homem de chapéu e uma maçã no rosto?", correta: "O Filho do Homem", opcoes: ["O Filho do Homem", "O Grito", "A Persistência da Memória", "Noite Estrelada"] },
+    { pergunta: "Qual é o nome do gênero musical criado no Bronx, em Nova York, nos anos 70?", correta: "Hip Hop", opcoes: ["Rock", "Jazz", "Hip Hop", "Reggae"] },
+    { pergunta: "Quem foi a cantora brasileira conhecida como 'Pimentinha'?", correta: "Elis Regina", opcoes: ["Gal Costa", "Elis Regina", "Maria Bethânia", "Cássia Eller"] },
+    { pergunta: "Quem escreveu 'Ensaio sobre a Cegueira'?", correta: "José Saramago", opcoes: ["José Saramago", "Fernando Pessoa", "José de Alencar", "Paulo Coelho"] },
+    { pergunta: "Qual é o nome do autor brasileiro de 'O Alquimista'?", correta: "Paulo Coelho", opcoes: ["Jorge Amado", "Paulo Coelho", "Carlos Drummond de Andrade", "Machado de Assis"] },
+    { pergunta: "Qual movimento artístico é conhecido pelas formas geométricas e uso de cores primárias?", correta: "Cubismo", opcoes: ["Impressionismo", "Cubismo", "Expressionismo", "Futurismo"] },
+    { pergunta: "Quem é considerado o pai da psicanálise?", correta: "Sigmund Freud", opcoes: ["Carl Jung", "Sigmund Freud", "Jean Piaget", "Jacques Lacan"] },
+    { pergunta: "Qual é o nome do festival indiano das cores?", correta: "Holi", opcoes: ["Diwali", "Holi", "Ramadã", "Durga Puja"] },
+    { pergunta: "Qual é o nome do autor de 'A Metamorfose'?", correta: "Franz Kafka", opcoes: ["Franz Kafka", "Fiódor Dostoiévski", "George Orwell", "Italo Calvino"] },
+    { pergunta: "Qual artista pintou 'A Persistência da Memória'?", correta: "Salvador Dalí", opcoes: ["Salvador Dalí", "Joan Miró", "Pablo Picasso", "Henri Matisse"] },
+    { pergunta: "Qual é o nome do famoso romance de Gabriel García Márquez sobre uma família ao longo de várias gerações?", correta: "Cem Anos de Solidão", opcoes: ["Cem Anos de Solidão", "O Amor nos Tempos do Cólera", "Crônica de uma Morte Anunciada", "Memória de Minhas Putas Tristes"] },
+    { pergunta: "Qual país é considerado o berço da filosofia ocidental?", correta: "Grécia", opcoes: ["Egito", "Grécia", "Itália", "Índia"] },
+    { pergunta: "Quem escreveu 'O Príncipe'?", correta: "Maquiavel", opcoes: ["Aristóteles", "Maquiavel", "Platão", "Rousseau"] },
+    { pergunta: "Qual é o nome da ópera composta por Georges Bizet sobre uma cigana?", correta: "Carmen", opcoes: ["Carmen", "La Traviata", "O Barbeiro de Sevilha", "Turandot"] },
+    { pergunta: "Qual é o nome da peça teatral mais conhecida de Sófocles?", correta: "Édipo Rei", opcoes: ["Édipo Rei", "Antígona", "As Bacantes", "Medeia"] },
+    { pergunta: "Qual é o nome do movimento artístico que surgiu como resposta à Primeira Guerra Mundial e é conhecido pela sua crítica ao racionalismo?", correta: "Dadaísmo", opcoes: ["Dadaísmo", "Surrealismo", "Expressionismo", "Impressionismo"] },
+  ]
+};
+
+// Banco de Perguntas de Verdadeiro ou Falso
+const bancoPerguntasVF = {
+  geografia: [
+      { pergunta: "O Brasil é o maior país da América do Sul?", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "A capital do Brasil é São Paulo?", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A capital do Brasil é Brasília." },
+      { pergunta: "O Deserto do Saara é o maior deserto do mundo?", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "A Rússia é o maior país do mundo em extensão territorial?", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "O Oceano Atlântico é maior que o Oceano Pacífico?", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Oceano Pacífico é o maior oceano do mundo." },
+      { pergunta: "A Linha do Equador passa pelo Brasil.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "A África é o continente com mais países.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "A Antártida possui uma grande população nativa.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Antártida não possui população nativa, apenas pesquisadores temporários." },
+      { pergunta: "O Monte Everest é a montanha mais alta do mundo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "O Rio Nilo é o rio mais extenso do mundo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "O Brasil faz fronteira com todos os países da América do Sul.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Brasil não faz fronteira com o Chile e o Equador." },
+      { pergunta: "A Argentina não faz fronteira com o Chile.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Argentina faz fronteira com o Chile." },
+      { pergunta: "A Groenlândia pertence à Dinamarca.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "O clima do deserto é sempre frio.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O clima do deserto é caracterizado por temperaturas extremas, podendo ser quente ou frio." },
+      { pergunta: "O Himalaia está localizado na Europa.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Himalaia está localizado na Ásia." },
+      { pergunta: "Existem vulcões ativos no Brasil.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Não há vulcões ativos no Brasil atualmente." },
+      { pergunta: "O Polo Norte está localizado na água do Oceano Ártico.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "O Equador divide o planeta em hemisférios norte e sul.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "Tóquio é a capital da China.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Tóquio é a capital do Japão. A capital da China é Pequim." },
+      { pergunta: "A Cordilheira dos Andes passa pelo Chile.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "A maioria dos desertos está localizada próxima à linha do Equador.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A maioria dos desertos está em zonas subtropicais, não próximas à linha do Equador." },
+      { pergunta: "Os Estados Unidos possuem 50 estados.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "A Austrália é ao mesmo tempo um país e um continente.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "O rio Amazonas nasce no Brasil.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O rio Amazonas nasce no Peru." },
+      { pergunta: "Existem 7 continentes no mundo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "O clima tropical é caracterizado por temperaturas baixas.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O clima tropical é quente, com estação chuvosa e seca." },
+      { pergunta: "O Deserto do Atacama é um dos mais secos do mundo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "O mar Morto tem alta salinidade e permite flutuação fácil.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "A Alemanha faz parte do continente asiático.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Alemanha está localizada na Europa." },
+      { pergunta: "O Brasil está localizado no hemisfério norte.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Brasil está localizado principalmente no hemisfério sul." },
+      { pergunta: "A África é banhada pelos oceanos Atlântico e Índico.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "O monte Kilimanjaro está localizado na África.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "O Canadá está localizado na América do Sul.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Canadá está localizado na América do Norte." },
+      { pergunta: "O clima equatorial é quente e úmido o ano todo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "A Itália é um país em formato de bota.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "A Islândia possui vários vulcões ativos.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "O planeta Terra possui apenas um continente.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Terra possui sete continentes." },
+      { pergunta: "O rio São Francisco atravessa o deserto do Saara.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O rio São Francisco está no Brasil. O Saara está na África." },
+      { pergunta: "A capital da Argentina é Buenos Aires.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "O continente americano é dividido em três partes: norte, central e sul.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "A Oceania é formada apenas pela Austrália.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Oceania inclui outros países e ilhas, como Nova Zelândia e Fiji." },
+      { pergunta: "O Brasil é cortado por três fusos horários.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "O oceano Índico é o maior do mundo.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O maior oceano é o Oceano Pacífico." },
+      { pergunta: "O deserto da Antártida é o mais frio do planeta.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "O Mar Cáspio é considerado um lago.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "A capital do México é Guadalajara.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A capital do México é a Cidade do México." },
+      { pergunta: "O relevo brasileiro é formado principalmente por montanhas altas.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O relevo brasileiro é composto por planaltos, planícies e depressões." },
+      { pergunta: "O Pantanal é o maior bioma do Brasil.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O maior bioma do Brasil é a Amazônia." },
+      { pergunta: "O Monte Fuji está localizado no Japão.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "O Rio Danúbio passa por mais de 10 países europeus.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] }
+    ],
+  
+  historia: [
+    { pergunta: "A Segunda Guerra Mundial terminou em 1945.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Segunda Guerra Mundial terminou em 1945.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Napoleão Bonaparte foi imperador da Alemanha.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Napoleão foi imperador da França, não da Alemanha." },
+    { pergunta: "A Revolução Francesa começou em 1789.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Império Romano caiu no século V.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Dom Pedro I proclamou a independência do Brasil em 1822.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A escravidão foi abolida no Brasil em 1888.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Guerra Fria foi um conflito armado entre EUA e URSS.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Guerra Fria foi uma disputa ideológica e política, sem confronto militar direto entre EUA e URSS." },
+    { pergunta: "A Revolução Industrial começou no Japão.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Revolução Industrial começou na Inglaterra no século XVIII." },
+    { pergunta: "A Idade Média foi marcada pelo feudalismo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Muro de Berlim caiu em 1989.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Nazismo surgiu na Itália.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Nazismo surgiu na Alemanha; na Itália surgiu o Fascismo." },
+    { pergunta: "Getúlio Vargas foi presidente do Brasil por mais de uma vez.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Os Maias viviam no território que hoje é o Egito.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Os Maias viviam na América Central, principalmente onde hoje é o México, Guatemala e Honduras." },
+    { pergunta: "A Guerra do Paraguai envolveu Brasil, Argentina e Uruguai contra o Paraguai.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Inconfidência Mineira foi um movimento contra os altos impostos.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Primeira Guerra Mundial começou em 1939.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Primeira Guerra Mundial começou em 1914; 1939 marca o início da Segunda Guerra." },
+    { pergunta: "A Revolução Russa aconteceu em 1917.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A civilização egípcia desenvolveu-se às margens do rio Nilo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Cristóvão Colombo descobriu a América em 1492.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Era Vargas começou em 1945.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Era Vargas começou em 1930, com a Revolução que depôs Washington Luís." },
+    { pergunta: "A independência dos Estados Unidos foi declarada em 1776.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O feudalismo predominou na Europa durante a Idade Moderna.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O feudalismo predominou na Idade Média; na Idade Moderna surgiram os Estados Nacionais." },
+    { pergunta: "Adolf Hitler liderou o Partido Nazista na Alemanha.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Batalha de Waterloo marcou a derrota de Napoleão.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Revolução Farroupilha ocorreu no estado da Bahia.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Revolução Farroupilha ocorreu no Rio Grande do Sul." },
+    { pergunta: "Os vikings eram originários da Escandinávia.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A União Soviética foi criada após a Revolução Francesa.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A União Soviética foi criada após a Revolução Russa de 1917, não após a Revolução Francesa." },
+    { pergunta: "A Guerra de Canudos ocorreu no século XIX.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Júlio César foi um imperador romano assassinado no Senado.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Idade Moderna começou com a queda do Império Romano do Ocidente.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A queda do Império Romano marca o início da Idade Média, não da Idade Moderna." },
+    { pergunta: "O Renascimento foi um movimento artístico e cultural da Idade Média.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Renascimento foi um movimento da Idade Moderna, com inspiração na Antiguidade." },
+    { pergunta: "A Guerra dos Cem Anos durou exatamente 100 anos.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A guerra durou 116 anos (1337–1453), apesar do nome." },
+    { pergunta: "O tratado de Tordesilhas foi assinado entre Portugal e Espanha.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Inquisição foi uma instituição criada para combater heresias.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Martin Luther King lutou pelos direitos civis nos EUA.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A colonização do Brasil começou em 1500.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Roma Antiga foi governada por uma democracia direta.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Roma foi uma república e depois um império, não uma democracia direta como Atenas." },
+    { pergunta: "Mahatma Gandhi foi um líder pacifista da Índia.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Iluminismo influenciou a Revolução Francesa.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A bomba atômica foi usada na cidade de Hiroshima durante a Primeira Guerra Mundial.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A bomba atômica foi usada na Segunda Guerra Mundial, em 1945." },
+    { pergunta: "O Holocausto foi o extermínio de judeus durante a Segunda Guerra Mundial.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Guerra do Vietnã envolveu o Brasil.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Brasil não participou da Guerra do Vietnã; o conflito envolveu principalmente EUA e Vietnã." },
+    { pergunta: "Nelson Mandela foi presidente da África do Sul após o apartheid.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Brasil participou da Primeira Guerra Mundial com tropas enviadas à Europa.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Brasil declarou guerra, mas sua participação foi principalmente naval e sem envio significativo de tropas terrestres à Europa." },
+    { pergunta: "A Revolução Pernambucana foi um movimento separatista.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Idade Antiga terminou com a invenção da escrita.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Idade Antiga começou com a invenção da escrita; terminou com a queda do Império Romano." },
+    { pergunta: "A Rainha Elizabeth II foi coroada em 1953.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Golpe Militar no Brasil ocorreu em 1964.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Primeira Constituição brasileira foi promulgada em 1988.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A primeira Constituição brasileira foi promulgada em 1824. A de 1988 é a atual." },
+    { pergunta: "O absolutismo defendia o poder limitado dos reis.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O absolutismo defendia o poder absoluto dos reis, sem limitações." }
+    ],
+  ciencia: [
+    { pergunta: "A água é composta por dois átomos de hidrogênio e um de oxigênio.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A célula é a menor unidade dos seres vivos.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Sol é um planeta do sistema solar.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Sol é uma estrela, não um planeta." },
+    { pergunta: "Os seres humanos possuem cinco sentidos básicos.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A fotossíntese é realizada pelas plantas para produzir energia.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Os vírus são considerados seres vivos.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Vírus não têm metabolismo próprio e precisam de células para se reproduzir." },
+    { pergunta: "A força da gravidade foi descoberta por Isaac Newton.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O corpo humano possui 206 ossos na fase adulta.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O oxigênio é essencial para a respiração celular.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A eletricidade é uma forma de energia.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O DNA carrega informações genéticas.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O sangue é bombeado pelo cérebro.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O sangue é bombeado pelo coração, não pelo cérebro." },
+    { pergunta: "A camada de ozônio protege a Terra da radiação ultravioleta.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Os metais são bons condutores de eletricidade.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O ser humano possui três pulmões.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O ser humano possui dois pulmões." },
+    { pergunta: "A lua produz sua própria luz.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Lua apenas reflete a luz do Sol, não emite luz própria." },
+    { pergunta: "A Terra gira em torno do Sol.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A ebulição da água ocorre a 100 °C ao nível do mar.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A vitamina C é importante para o sistema imunológico.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A clorofila é responsável pela cor azul das flores.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A clorofila dá cor verde às plantas, não azul às flores." },
+    { pergunta: "O som se propaga mais rápido no ar do que na água.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O som se propaga mais rápido na água do que no ar." },
+    { pergunta: "O átomo é formado por prótons, nêutrons e elétrons.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A tabela periódica organiza os elementos químicos.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "As bactérias não causam nenhuma doença nos seres humanos.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Muitas bactérias são benéficas, mas algumas causam doenças." },
+    { pergunta: "O magnetismo está relacionado aos ímãs.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O cérebro controla todas as funções do corpo humano.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A água em estado sólido é chamada de vapor.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A água em estado sólido é gelo; o vapor é o estado gasoso." },
+    { pergunta: "O oxigênio representa aproximadamente 21% do ar atmosférico.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O petróleo é uma fonte de energia renovável.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O petróleo é uma fonte não renovável, pois leva milhões de anos para se formar." },
+    { pergunta: "O sistema digestivo é responsável pela digestão dos alimentos.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A lua influencia as marés da Terra.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O pH neutro é igual a 7.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A principal fonte de energia da Terra é o Sol.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A célula vegetal não possui parede celular.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "As células vegetais possuem parede celular, diferentemente das animais." },
+    { pergunta: "A teoria da evolução foi proposta por Charles Darwin.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Todos os mamíferos são ovíparos.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A maioria dos mamíferos é vivípara, ou seja, dá à luz filhotes vivos." },
+    { pergunta: "A digestão começa na boca.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O nitrogênio é o gás mais abundante na atmosfera terrestre.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O arco-íris é causado pela refração da luz.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "As plantas respiram oxigênio durante a noite.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A velocidade da luz é maior que a do som.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Todos os peixes respiram pelos pulmões.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Peixes respiram principalmente por brânquias, não por pulmões." },
+    { pergunta: "O carbono é um elemento essencial para a vida.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "As vacinas servem para prevenir doenças.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O cloro é um metal alcalino.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O cloro é um halogênio, não um metal alcalino." },
+    { pergunta: "O pulmão é o órgão responsável pela troca gasosa no corpo humano.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Terra é o único planeta conhecido que possui vida.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O ciclo da água inclui evaporação, condensação e precipitação.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A corrente elétrica é medida em volts.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A corrente elétrica é medida em amperes; volts medem a tensão." },
+    { pergunta: "A Lua tem atmosfera como a Terra.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Lua não tem uma atmosfera significativa como a Terra." },
+    { pergunta: "A camada de ozônio é composta por moléculas de O3.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] }
+  ],
+  esportes: [
+    { pergunta: "O futebol foi criado na Inglaterra.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Pelé ganhou três Copas do Mundo com a seleção brasileira.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A NBA é a liga profissional de futebol dos Estados Unidos.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A NBA é a liga profissional de basquete dos Estados Unidos." },
+    { pergunta: "Um jogo de vôlei é jogado com três sets obrigatórios.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Uma partida de vôlei é decidida em melhor de cinco sets." },
+    { pergunta: "O esporte conhecido como 'esgrima' é praticado com espadas.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Cristiano Ronaldo já jogou no Manchester United.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Brasil já sediou os Jogos Olímpicos.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O tênis é um esporte praticado exclusivamente em duplas.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O tênis pode ser jogado tanto em simples quanto em duplas." },
+    { pergunta: "O golfe é jogado com tacos e bolas pequenas.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O basquete foi inventado por um canadense chamado James Naismith.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Copa do Mundo de futebol acontece a cada 2 anos.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Copa do Mundo de futebol é realizada a cada 4 anos." },
+    { pergunta: "A Fórmula 1 é um esporte de automobilismo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O surfe é um esporte olímpico desde Tóquio 2020.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Usain Bolt é conhecido como o homem mais rápido do mundo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O voleibol de praia é jogado com cinco jogadores de cada lado.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O vôlei de praia é jogado por duplas (2 jogadores de cada lado)." },
+    { pergunta: "Neymar começou sua carreira profissional no Santos.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O remo é um esporte aquático olímpico.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O judô foi criado no Japão.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "As Olimpíadas de Inverno incluem esportes como esqui e hóquei no gelo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O maratona tem 10 km de distância.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A maratona tem 42,195 km de distância." },
+    { pergunta: "Lionel Messi jogou a maior parte da carreira no Barcelona.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O handebol é jogado com os pés.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O handebol é jogado com as mãos, como o nome indica." },
+    { pergunta: "A ginástica artística é um esporte olímpico.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Tour de France é uma competição de ciclismo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Brasil nunca ganhou medalha de ouro no vôlei olímpico.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Brasil já conquistou várias medalhas de ouro no vôlei olímpico." },
+    { pergunta: "O boxe é um esporte de contato físico.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O futebol americano é o esporte mais popular dos EUA.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O skate entrou nas Olimpíadas em 2016.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O skate entrou nas Olimpíadas em Tóquio 2020." },
+    { pergunta: "Zico foi um dos maiores jogadores da história do Flamengo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O beisebol é um esporte muito popular no Japão.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Ronaldinho Gaúcho venceu a Bola de Ouro da FIFA.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Brasil já ganhou cinco Copas do Mundo de futebol.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Natação é um dos esportes mais antigos das Olimpíadas.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O atletismo é composto apenas por corrida de 100 metros.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O atletismo inclui várias modalidades, como saltos, lançamentos e diversas corridas." },
+    { pergunta: "O tênis de mesa é também chamado de pingue-pongue.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O UFC é uma competição de luta livre greco-romana.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O UFC é uma competição de artes marciais mistas (MMA), não luta greco-romana." },
+    { pergunta: "A Copa Libertadores é um torneio europeu de futebol.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Copa Libertadores é um torneio sul-americano de clubes." },
+    { pergunta: "A Argentina já foi campeã mundial de futebol.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A principal liga de basquete dos EUA é a NFL.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A NFL é a liga de futebol americano; a principal liga de basquete é a NBA." },
+    { pergunta: "O rugby e o futebol americano têm regras muito semelhantes.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Embora pareçam semelhantes, rugby e futebol americano têm regras bem diferentes." },
+    { pergunta: "O tênis é jogado em quadras de diferentes superfícies.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O goleiro é o único jogador que pode usar as mãos no futebol.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Mundial de Clubes é disputado apenas por times europeus.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Mundial de Clubes reúne campeões continentais de várias regiões, não só da Europa." },
+    { pergunta: "Michael Phelps é o maior medalhista olímpico da história.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O basquete é jogado com dois times de 7 jogadores.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O basquete é jogado com dois times de 5 jogadores em quadra." },
+    { pergunta: "Na Fórmula 1, o piloto Ayrton Senna venceu três campeonatos mundiais.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Brasil nunca ganhou medalha olímpica no judô.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Brasil já conquistou diversas medalhas olímpicas no judô." },
+    { pergunta: "O futebol é o esporte mais praticado do mundo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Maradona é considerado um dos maiores jogadores da Argentina.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Eurocopa é um torneio entre seleções da Ásia.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Eurocopa é um torneio entre seleções da Europa." }
+  ],
+  cultura: [
+    { pergunta: "Machado de Assis é um dos maiores escritores da literatura brasileira.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O samba é um ritmo musical típico da Alemanha.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O samba é um ritmo musical típico do Brasil." },
+    { pergunta: "O Oscar é uma premiação do cinema mundial.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"]},
+    { pergunta: "William Shakespeare foi um dramaturgo inglês.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Cristo Redentor é uma das sete maravilhas do mundo moderno.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A música clássica é originária da América do Sul.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A música clássica tem suas raízes na Europa." },
+    { pergunta: "A Capoeira é uma expressão cultural brasileira que mistura dança e luta.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Pablo Picasso foi um famoso pintor espanhol.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Festival de Cannes acontece no Japão.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Festival de Cannes acontece na França." },
+    { pergunta: "A feijoada é um prato tradicional brasileiro.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O carnaval do Rio de Janeiro é um dos maiores do mundo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Monalisa foi pintada por Leonardo da Vinci.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Reggae é um estilo musical originário da Jamaica.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Natal é comemorado no dia 31 de dezembro.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Natal é comemorado no dia 25 de dezembro." },
+    { pergunta: "Harry Potter é uma obra da autora britânica J.K. Rowling.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O tango é uma dança típica da Argentina.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A cultura indígena brasileira não influencia a culinária nacional.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A cultura indígena tem grande influência na culinária brasileira, como o uso de ingredientes nativos." },
+    { pergunta: "A Festa Junina é uma celebração tradicional brasileira.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A língua portuguesa é falada em mais de 10 países.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Halloween é uma festa tradicional brasileira.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Halloween é uma festa de origem americana, celebrada em 31 de outubro." },
+    { pergunta: "Vinícius de Moraes foi poeta e compositor brasileiro.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Hollywood é o centro da indústria cinematográfica dos EUA.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Os Beatles foram uma banda formada nos Estados Unidos.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Os Beatles foram uma banda britânica formada em Liverpool." },
+    { pergunta: "A literatura de cordel é uma manifestação cultural do Norte do Brasil.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A literatura de cordel é uma manifestação cultural do Nordeste do Brasil." },
+    { pergunta: "Carmen Miranda foi uma cantora e atriz brasileira de sucesso internacional.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Maracatu é uma manifestação cultural de origem africana no Brasil.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A arte barroca teve grande influência no Brasil colonial.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A feitiçaria é um dos temas recorrentes da literatura fantástica.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A mitologia grega influenciou diversas obras artísticas e literárias ocidentais.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Chico Buarque é um compositor e escritor brasileiro.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A bossa nova nasceu na Argentina.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A bossa nova é um gênero musical brasileiro, surgido no Rio de Janeiro." },
+    { pergunta: "O Museu do Louvre está localizado em Paris.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Bienal do Livro acontece apenas no exterior.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Bienal do Livro acontece em várias cidades, incluindo São Paulo e Rio de Janeiro." },
+    { pergunta: "O teatro grego surgiu como uma forma de homenagear os deuses.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O samba-enredo é utilizado durante os desfiles das escolas de samba.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A cultura japonesa é conhecida pelo uso de máscaras no teatro Nô.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A cultura popular não se transmite oralmente.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A cultura popular é frequentemente transmitida oralmente, através de histórias, músicas e tradições." },
+    { pergunta: "A música sertaneja surgiu no interior do Brasil.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Carnaval de Veneza é famoso por suas máscaras elaboradas.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A pizza é originário da França.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A pizza é originária da Itália." },
+    { pergunta: "As festas religiosas têm grande importância na cultura brasileira.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Festival de Parintins celebra a cultura amazônica.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A cultura africana não influenciou a formação do Brasil.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A MPB significa Música Popular Brasileira.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "Tarsila do Amaral foi uma importante pintora do modernismo brasileiro.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O grafite é uma forma de arte urbana.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Dia da Consciência Negra homenageia Zumbi dos Palmares.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A literatura brasileira começou no século XX.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A literatura brasileira tem raízes que remontam ao período colonial." },
+    { pergunta: "Os filmes de animação não são considerados arte.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Os filmes de animação são uma forma de arte reconhecida mundialmente." },
+    { pergunta: "A língua inglesa é a única falada na Europa.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Na Europa, são faladas várias línguas, incluindo francês, alemão, espanhol e italiano." },
+    { pergunta: "A arte rupestre é uma das primeiras formas de manifestação artística humana.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] }
+  ]
+};
+
+// Função para mostrar a tela de seleção de temas
+function mostrarTemas() {
+  ocultarTelas();
+  document.getElementById('tela-temas').classList.remove('oculto');
+}
+
+// Função para escolher o tema
+function escolherTema(tema) {
+  temaSelecionado = tema;
+  ocultarTelas();
+  document.getElementById('tela-tipo-pergunta').classList.remove('oculto'); // Mostra a tela de tipo de pergunta
+}
+
+// Função para selecionar 15 perguntas aleatórias com base no tema
+function selecionarPerguntasAleatorias() {
+  let perguntasSelecionadas = [];
+  const bancoAtual = tipoPergunta === 'verdadeiro-falso' ? bancoPerguntasVF : bancoPerguntas; // Escolhe o banco correto
+
+  if (temaSelecionado === 'geral') {
+    // Combina todas as perguntas de todos os temas
+    const todasPerguntas = Object.values(bancoAtual).flat();
+    perguntasSelecionadas = [...todasPerguntas];
+  } else {
+    perguntasSelecionadas = [...bancoAtual[temaSelecionado]];
+  }
+
+  perguntasSelecionadas.sort(() => Math.random() - 0.5); // Embaralha as perguntas
+  return perguntasSelecionadas.slice(0, 10); // Seleciona as 10 primeiras
+}
+
+// Atualize a função iniciarComCadastro para mostrar a tela de temas
+function iniciarComCadastro() {
+  const nomeInput = document.getElementById('nome').value.trim();
+  const turmaInput = document.getElementById('turma').value.trim();
+  if (nomeInput === '' || turmaInput === '') {
+      alert('Preencha o nome e a turma.');
+      return;
+  }
+  nomeUsuario = nomeInput;
+  turmaUsuario = turmaInput;
+  mostrarTemas(); // Mostra a tela de seleção de temas
+}
+
+// Função para iniciar o quiz
+function iniciarQuiz() {
+    // Captura o tipo de pergunta selecionado no <select>
+    tipoPergunta = document.getElementById('tipo-pergunta').value;
+
+    perguntas = selecionarPerguntasAleatorias(); // Seleciona 10 perguntas aleatórias
+    perguntaAtual = 0;
+    pontuacao = 0;
+    ocultarTelas();
+    document.getElementById('tela-quiz').classList.remove('oculto');
+    
+    // Mostra nome, turma e tema
+    document.getElementById('usuario-info').innerText = `Jogador: ${nomeUsuario} | Turma: ${turmaUsuario} | Tema: ${temaSelecionado.charAt(0).toUpperCase() + temaSelecionado.slice(1)}`;
+
+    mostrarPergunta();
+}
+
+// Função para mostrar a pergunta atual
+function mostrarPergunta() {
+  if (perguntaAtual >= perguntas.length) { // Usa o array `perguntas` com 15 perguntas
+    mostrarResultado();
+    return;
+  }
+
+  const p = perguntas[perguntaAtual]; // Obtém a pergunta atual do array `perguntas`
+  document.getElementById('pergunta').innerText = p.pergunta;
+
+  const opcoesDiv = document.getElementById('opcoes');
+  opcoesDiv.innerHTML = '';
+
+  // Exibe as opções com base no tipo de pergunta
+  if (tipoPergunta === 'verdadeiro-falso') {
+    ['Verdadeiro', 'Falso'].forEach(opcao => {
+      const btn = document.createElement('button');
+      btn.innerText = opcao;
+      btn.onclick = () => verificarResposta(opcao);
+      opcoesDiv.appendChild(btn);
+    });
+  } else {
+    p.opcoes.forEach(opcao => {
+      const btn = document.createElement('button');
+      btn.innerText = opcao;
+      btn.onclick = () => verificarResposta(opcao);
+      opcoesDiv.appendChild(btn);
+    });
+  }
+
+  document.getElementById('progresso').innerText = `Pergunta ${perguntaAtual + 1} de ${perguntas.length}`;
+}
+
+// Função para verificar a resposta
+function verificarResposta(respostaSelecionada) {
+  const p = perguntas[perguntaAtual]; // Usa o array `perguntas` com 15 perguntas
+  const botoes = document.querySelectorAll('#opcoes button');
+  const opcoesDiv = document.getElementById('opcoes');
+
+  botoes.forEach(btn => {
+      if (btn.innerText === p.correta) {
+          btn.classList.add('correta');
+      } else if (btn.innerText === respostaSelecionada) {
+          btn.classList.add('errada');
+      }
+      btn.disabled = true; // Desativa os botões após resposta
+  });
+
+  if (respostaSelecionada === p.correta) {
+      pontuacao++;
+  } else if (p.explicacao) {
+      // Exibe a explicação caso o usuário erre
+      const explicacao = document.createElement('p');
+      explicacao.innerText = `Explicação: ${p.explicacao}`;
+      explicacao.style.color = 'white';
+      explicacao.style.marginTop = '10px';
+      opcoesDiv.appendChild(explicacao);
+  }
+
+    // Adiciona o botão "Próxima"
+    const botaoProxima = document.createElement('button');
+    botaoProxima.innerText = 'Próxima';
+    botaoProxima.style.marginTop = '20px';
+    botaoProxima.style.display = 'block';
+    botaoProxima.onclick = () => {
+        perguntaAtual++;
+        mostrarPergunta();
+    };
+    opcoesDiv.appendChild(botaoProxima);
+}
+
+// Função para mostrar o resultado final
+function mostrarResultado() {
+    ocultarTelas();
+    document.getElementById('tela-resultado').classList.remove('oculto');
+    document.getElementById('pontuacao-final').innerText = `Você acertou ${pontuacao} de ${perguntas.length}`;
+    let msg = '';
+    if (pontuacao >= 8) msg = 'Parabéns!';
+    else if (pontuacao >= 5) msg = 'Quase lá!';
+    else msg = 'Continue tentando!';
+    document.getElementById('mensagem-final').innerText = msg;
+    salvarRanking();
+}
+
+// Funções auxiliares
+function mostrarCadastro() {
+    ocultarTelas();
+    document.getElementById('tela-cadastro').classList.remove('oculto');
+}
+
+function mostrarRanking() {
+    ocultarTelas();
+    document.getElementById('tela-ranking').classList.remove('oculto');
+    carregarRanking();
+}
+
+function ocultarTelas() {
+    document.querySelectorAll('.tela').forEach(tela => tela.classList.add('oculto'));
+}
+
+function reiniciar() {
+    perguntas = selecionarPerguntasAleatorias(); // Seleciona novas 15 perguntas
+    perguntaAtual = 0;
+    pontuacao = 0;
+    ocultarTelas();
+    document.getElementById('tela-quiz').classList.remove('oculto');
+    mostrarPergunta();
+}
+
+function voltarInicio() {
+    ocultarTelas();
+    document.getElementById('tela-inicial').classList.remove('oculto');
+}
+
+function salvarRanking() {
+    const ranking = JSON.parse(localStorage.getItem('rankingQuiz') || '[]');
+    ranking.push({ nome: nomeUsuario, turma: turmaUsuario, pontuacao });
+    localStorage.setItem('rankingQuiz', JSON.stringify(ranking));
+}
+
+function carregarRanking() {
+    const ranking = JSON.parse(localStorage.getItem('rankingQuiz') || '[]');
+    const lista = document.getElementById('lista-ranking');
+    lista.innerHTML = '';
+    ranking.sort((a, b) => b.pontuacao - a.pontuacao);
+    ranking.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.innerText = `${index + 1}. ${item.nome} (${item.turma}) - ${item.pontuacao} pts`;
+        lista.appendChild(li);
+    });
+}
