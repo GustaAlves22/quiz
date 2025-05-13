@@ -636,47 +636,44 @@ function mostrarPergunta() {
 
 // Função para verificar a resposta
 function verificarResposta(respostaSelecionada) {
-  const p = perguntas[perguntaAtual]; // Usa o array `perguntas` com 15 perguntas
+  const p = perguntas[perguntaAtual]; // Obtém a pergunta atual
   const botoes = document.querySelectorAll('#opcoes button');
   const opcoesDiv = document.getElementById('opcoes');
 
+  // Verifica as respostas e aplica as classes corretas
   botoes.forEach(btn => {
-      if (btn.innerText === p.correta) {
-          btn.classList.add('correta');
-      } else if (btn.innerText === respostaSelecionada) {
-          btn.classList.add('errada');
-      }
-      btn.disabled = true; // Desativa os botões após resposta
+    if (btn.innerText === p.correta) {
+      btn.classList.add('correta'); // Marca a resposta correta
+    } else if (btn.innerText === respostaSelecionada) {
+      btn.classList.add('errada'); // Marca a resposta errada
+    }
+    btn.disabled = true; // Desativa todos os botões após a resposta
   });
 
-  if (respostaSelecionada === p.correta) {s
-      pontuacao++;
+  // Incrementa a pontuação se a resposta estiver correta
+  if (respostaSelecionada === p.correta) {
+    pontuacao++;
   } else if (p.explicacao) {
-      // Exibe a explicação caso o usuário erre
-      const explicacao = document.createElement('p');
-      explicacao.innerText = `Explicação: ${p.explicacao}`;
-      explicacao.style.color = 'white';
-      explicacao.style.marginTop = '10px';
-      opcoesDiv.appendChild(explicacao);
+    // Exibe a explicação caso o usuário erre
+    const explicacao = document.createElement('p');
+    explicacao.innerText = `Explicação: ${p.explicacao}`;
+    explicacao.style.color = 'white';
+    explicacao.style.marginTop = '10px';
+    opcoesDiv.appendChild(explicacao);
   }
 
-    // Adiciona o botão "Próxima"
+  // Adiciona o botão "Próxima"
+  if (!document.querySelector('.botao-proxima')) { // Evita criar múltiplos botões
     const botaoProxima = document.createElement('button');
     botaoProxima.innerText = 'Próxima';
-    botaoProxima.classList.add('botao-proxima');
+    botaoProxima.classList.add('botao-proxima'); // Aplica a classe CSS
     botaoProxima.style.marginTop = '50px';
-    botaoProxima.style.display = 'block';
-    botaoProxima.style.backgroundColor = '#007bff'; // Cor de fundo azul
-    botaoProxima.style.color = 'white'; // Cor do texto branca
-    botaoProxima.style.border = 'none'; // Remove a borda
-    botaoProxima.style.padding = '10px 20px'; // Adiciona espaçamento interno
-    botaoProxima.style.borderRadius = '5px'; // Bordas arredondadas
-    botaoProxima.style.cursor = 'pointer'; // Mostra o cursor de clique
     botaoProxima.onclick = () => {
-    perguntaAtual++;
-    mostrarPergunta();
-};
-opcoesDiv.appendChild(botaoProxima);
+      perguntaAtual++;
+      mostrarPergunta();
+    };
+    opcoesDiv.appendChild(botaoProxima);
+  }
 }
 
 // Função para mostrar o resultado final
@@ -738,4 +735,4 @@ function carregarRanking() {
         li.innerText = `${index + 1}. ${item.nome} (${item.turma}) - ${item.pontuacao} pts`;
         lista.appendChild(li);
     });
-}
+  }

@@ -190,18 +190,21 @@ body {
 }
 
 .botao-proxima {
-  background-color: #007bff; /* Cor de fundo azul */
-  color: white; /* Cor do texto branca */
-  border: none; /* Remove a borda */
-  padding: 10px 20px; /* Adiciona espaçamento interno */
+  background-color: #007bff !important; /* Azul chamativo */
+  color: white !important; /* Texto branco */
+  border: none; /* Remove bordas */
+  padding: 10px 20px; /* Espaçamento interno */
   border-radius: 5px; /* Bordas arredondadas */
   cursor: pointer; /* Mostra o cursor de clique */
   font-size: 16px; /* Tamanho da fonte */
   text-align: center; /* Centraliza o texto */
+  margin-top: 20px; /* Espaçamento superior */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Animação suave */
 }
 
 .botao-proxima:hover {
-  background-color: #0056b3; /* Cor de fundo ao passar o mouse */
+  background-color: #0056b3; /* Azul mais escuro no hover */
+  transform: scale(1.05); /* Leve aumento no hover */
 }
 
 .oculto {
