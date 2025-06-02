@@ -6,37 +6,31 @@ let nomeUsuario = '';
 let turmaUsuario = '';
 let temaSelecionado = '';
 let tipoPergunta = 'multipla'; // Valor padrão: Múltipla Escolha
+let pulosRestantes = 3;
+let quizPersonalizadoAtivo = false;
 
 
 // Banco de Perguntas
 const bancoPerguntas = {
   geografia: [
-    { pergunta: "Qual é a capital do Brasil?", correta: "Brasília", opcoes: ["São Paulo", "Rio de Janeiro", "Brasília", "Belo Horizonte"] },
     { pergunta: "Qual é o maior oceano do mundo?", correta: "Pacífico", opcoes: ["Atlântico", "Índico", "Pacífico", "Ártico"] },
     { pergunta: "Qual é o maior deserto do mundo?", correta: "Deserto do Saara", opcoes: ["Deserto de Atacama", "Deserto do Saara", "Deserto da Arábia", "Deserto de Gobi"] },
-    { pergunta: "Em que continente fica o Egito?", correta: "África", opcoes: ["África", "Ásia", "Europa", "América"] },
-    { pergunta: "Qual é o maior país do mundo?", correta: "Rússia", opcoes: ["Estados Unidos", "China", "Rússia", "Canadá"] },
-    { pergunta: "Qual é a capital da França?", correta: "Paris", opcoes: ["Roma", "Paris", "Berlim", "Madrid"] },
-    { pergunta: "Qual é a capital da Itália?", correta: "Roma", opcoes: ["Milão", "Roma", "Florença", "Veneza"] },
+    { pergunta: "Qual país europeu tem a maior quantidade de lagos?", correta: "Finlândia", opcoes: ["Finlândia", "Suécia", "Noruega", "Rússia"] },
+    { pergunta: "Qual é o nome da corrente oceânica responsável por trazer calor para o noroeste da Europa?", correta: "Corrente do Golfo", opcoes: ["Corrente de Humboldt", "Corrente do Golfo", "Corrente das Canárias", "Corrente Equatorial"] },
+    { pergunta: "Qual é o país com mais fusos horários no mundo?", correta: "França", opcoes: ["Rússia", "França", "Estados Unidos", "China"] },
     { pergunta: "Qual é o maior estado do Brasil em extensão territorial?", correta: "Amazonas", opcoes: ["São Paulo", "Minas Gerais", "Amazonas", "Bahia"] },
     { pergunta: "Qual é o nome do maior rio do mundo?", correta: "Amazonas", opcoes: ["Nilo", "Amazonas", "Yangtze", "Mississippi"] },
     { pergunta: "Qual é o nome do maior continente do mundo?", correta: "Ásia", opcoes: ["África", "América", "Ásia", "Europa"] },
     { pergunta: "Qual é o menor país do mundo?", correta: "Vaticano", opcoes: ["Mônaco", "Vaticano", "Malta", "San Marino"] },
-    { pergunta: "Qual é o nome do maior deserto gelado do mundo?", correta: "Antártida", opcoes: ["Ártico", "Antártida", "Groenlândia", "Sibéria"] },
     { pergunta: "Qual é o nome do maior arquipélago do mundo?", correta: "Indonésia", opcoes: ["Filipinas", "Maldivas", "Indonésia", "Japão"] },
     { pergunta: "Qual é o nome do maior bioma brasileiro?", correta: "Amazônia", opcoes: ["Cerrado", "Amazônia", "Mata Atlântica", "Caatinga"] },
     { pergunta: "Qual é o nome do maior lago da África?", correta: "Lago Vitória", opcoes: ["Lago Tanganica", "Lago Vitória", "Lago Niassa", "Lago Chade"] },
     { pergunta: "Qual é o nome do maior rio da África?", correta: "Rio Nilo", opcoes: ["Rio Congo", "Rio Níger", "Rio Nilo", "Rio Zambeze"] },
     { pergunta: "Qual é o nome do maior rio da América do Sul?", correta: "Amazonas", opcoes: ["Amazonas", "Nilo", "Mississippi", "Yangtze"] },
-    { pergunta: "Qual é o nome do maior golfo do mundo?", correta: "Golfo do México", opcoes: ["Golfo Pérsico", "Golfo do México", "Golfo de Bengala", "Golfo de Aden"] },
-    { pergunta: "Qual é o nome do maior vulcão ativo do mundo?", correta: "Mauna Loa", opcoes: ["Etna", "Krakatoa", "Mauna Loa", "Vesúvio"] },
     { pergunta: "Qual é o nome do maior lago de água doce do mundo?", correta: "Lago Superior", opcoes: ["Lago Vitória", "Lago Baikal", "Lago Superior", "Lago de Genebra"] },
     { pergunta: "Qual é o nome do maior sistema de recifes de coral do mundo?", correta: "Grande Barreira de Coral", opcoes: ["Recife de Belize", "Grande Barreira de Coral", "Recife de Apo", "Recife de Ningaloo"] },
     { pergunta: "Qual é o nome do maior vulcão ativo do mundo?", correta: "Mauna Loa", opcoes: ["Etna", "Krakatoa", "Mauna Loa", "Vesúvio"] },
     { pergunta: "Qual é o nome do maior deserto gelado do mundo?", correta: "Antártida", opcoes: ["Ártico", "Antártida", "Groenlândia", "Sibéria"] },
-    { pergunta: "Qual é o nome do maior rio do mundo?", correta: "Amazonas", opcoes: ["Nilo", "Amazonas", "Yangtze", "Mississippi"] },
-    { pergunta: "Qual é o nome do maior rio da África?", correta: "Rio Nilo", opcoes: ["Rio Congo", "Rio Níger", "Rio Nilo", "Rio Zambeze"] },
-    { pergunta: "Qual é o nome do maior continente do mundo?", correta: "Ásia", opcoes: ["África", "América", "Ásia", "Europa"] },
     { pergunta: "Qual é o nome do maior deserto da Ásia?", correta: "Deserto de Gobi", opcoes: ["Deserto de Gobi", "Deserto da Arábia", "Deserto do Saara", "Deserto de Atacama"] },
     { pergunta: "Qual é o nome do maior vulcão da Europa?", correta: "Monte Etna", opcoes: ["Monte Vesúvio", "Monte Etna", "Monte Kilimanjaro", "Monte Fuji"] },
     { pergunta: "Qual é o nome do maior animal marinho?", correta: "Baleia Azul", opcoes: ["Tubarão Branco", "Baleia Azul", "Orca", "Golfinho"] },
@@ -54,12 +48,8 @@ const bancoPerguntas = {
     { pergunta: "Qual país é famoso por ter mais de 180 mil lagos?", correta: "Canadá", opcoes: ["Suécia", "Rússia", "Canadá", "Noruega"] },
     { pergunta: "Qual é o nome da linha imaginária que divide o planeta em hemisférios norte e sul?", correta: "Linha do Equador", opcoes: ["Trópico de Câncer", "Meridiano de Greenwich", "Linha do Equador", "Trópico de Capricórnio"] },
     { pergunta: "Qual é a capital do Canadá?", correta: "Ottawa", opcoes: ["Toronto", "Vancouver", "Ottawa", "Montreal"] },
-    { pergunta: "Em que país fica a Muralha da China?", correta: "China", opcoes: ["Japão", "Mongólia", "China", "Coreia do Sul"] },
-    { pergunta: "Qual é a capital da Argentina?", correta: "Buenos Aires", opcoes: ["Córdoba", "Rosário", "Buenos Aires", "Mendoza"] },
     { pergunta: "Qual é o nome do relevo submarino mais profundo do planeta?", correta: "Fossa das Marianas", opcoes: ["Fossa de Java", "Fossa das Marianas", "Fossa do Atlântico", "Fossa das Aleutas"] },
     { pergunta: "Qual país possui o maior litoral do mundo?", correta: "Canadá", opcoes: ["Brasil", "Austrália", "Indonésia", "Canadá"] },
-    { pergunta: "Qual é a capital do Japão?", correta: "Tóquio", opcoes: ["Kyoto", "Osaka", "Tóquio", "Hiroshima"] },
-    { pergunta: "Qual país é conhecido como a Terra dos Mil Lagos?", correta: "Finlândia", opcoes: ["Suécia", "Canadá", "Noruega", "Finlândia"] },
     { pergunta: "Qual é a capital da Colômbia?", correta: "Bogotá", opcoes: ["Medellín", "Cali", "Bogotá", "Cartagena"] },
     { pergunta: "Qual é a capital do Cazaquistão?", correta: "Astana", opcoes: ["Almaty", "Astana", "Tashkent", "Bishkek"] },
     { pergunta: "Em qual país está localizado o deserto de Atacama?", correta: "Chile", opcoes: ["Peru", "Argentina", "Chile", "Bolívia"] },
@@ -80,7 +70,19 @@ const bancoPerguntas = {
     { pergunta: "Qual é o nome do fenômeno climático que aquece as águas do Pacífico equatorial?", correta: "El Niño", opcoes: ["La Niña", "El Niño", "Oscilação Antártica", "Monções"] },
     { pergunta: "Qual país sul-americano não possui fronteira com o Brasil?", correta: "Equador", opcoes: ["Chile", "Uruguai", "Equador", "Colômbia"] },
     { pergunta: "Qual é o estado brasileiro com maior número de municípios?", correta: "Minas Gerais", opcoes: ["Bahia", "São Paulo", "Minas Gerais", "Paraná"] },
-    { pergunta: "Qual é o nome da formação rochosa localizada no Arizona, famosa por suas paisagens?", correta: "Grand Canyon", opcoes: ["Monument Valley", "Grand Canyon", "Bryce Canyon", "Zion Canyon"] }
+    { pergunta: "Qual é o nome da formação rochosa localizada no Arizona, famosa por suas paisagens?", correta: "Grand Canyon", opcoes: ["Monument Valley", "Grand Canyon", "Bryce Canyon", "Zion Canyon"] },
+    { pergunta: "Qual é a capital do Peru?", correta: "Lima", opcoes: ["Lima", "Quito", "La Paz", "Bogotá"] },
+    { pergunta: "Qual é o maior arquipélago do Brasil?", correta: "Marajó", opcoes: ["Fernando de Noronha", "Marajó", "Abrolhos", "Ilhabela"] },
+    { pergunta: "Qual é o principal bioma do Centro-Oeste brasileiro?", correta: "Cerrado", opcoes: ["Amazônia", "Cerrado", "Caatinga", "Mata Atlântica"] },
+    { pergunta: "Qual é o nome do rio que corta a cidade de Londres?", correta: "Tâmisa", opcoes: ["Tâmisa", "Sena", "Danúbio", "Tibre"] },
+    { pergunta: "Qual é o país mais populoso da África?", correta: "Nigéria", opcoes: ["Egito", "Nigéria", "África do Sul", "Etiópia"] },
+    { pergunta: "Qual é o maior país da Europa em extensão territorial?", correta: "Rússia", opcoes: ["Alemanha", "França", "Rússia", "Espanha"] },
+    { pergunta: "Qual é o nome do deserto que cobre grande parte do norte da África?", correta: "Saara", opcoes: ["Saara", "Kalahari", "Atacama", "Gobi"] },
+    { pergunta: "Qual é o nome da planície que cobre grande parte do norte da Índia e Bangladesh?", correta: "Planície Indo-Gangética", opcoes: ["Planície Indo-Gangética", "Planície do Mekong", "Planície do Yangtzé", "Planície do Danúbio"] },
+    { pergunta: "Qual é o nome do lago mais antigo do mundo?", correta: "Lago Baikal", opcoes: ["Lago Baikal", "Lago Vitória", "Lago Tanganica", "Lago Titicaca"] },
+    { pergunta: "Qual é o nome do fenômeno que ocorre quando ventos úmidos sobem uma encosta e provocam chuvas intensas?", correta: "Efeito orográfico", opcoes: ["Efeito orográfico", "Efeito de Coriolis", "Efeito estufa", "Sombra de chuva"] },
+    { pergunta: "Qual é o nome do ponto mais alto da Península Ibérica?", correta: "Pico Mulhacén", opcoes: ["Pico Mulhacén", "Pico Aneto", "Pico Almanzor", "Pico Veleta"] },
+    { pergunta: "Qual é o nome do estreito que separa a Ásia do Alasca?", correta: "Estreito de Bering", opcoes: ["Estreito de Bering", "Estreito de Gibraltar", "Estreito de Magalhães", "Estreito de Malaca"] }
 ],
   historia: [
     { pergunta: "Em que ano a Primeira Guerra Mundial começou?", correta: "1914", opcoes: ["1900", "1914", "1939", "1918"] },
@@ -94,14 +96,10 @@ const bancoPerguntas = {
     { pergunta: "Quem foi o primeiro presidente do Brasil?", correta: "Marechal Deodoro da Fonseca", opcoes: ["Getúlio Vargas", "Juscelino Kubitschek", "Marechal Deodoro da Fonseca", "Fernando Henrique Cardoso"] },
     { pergunta: "Quem foi o autor de 'Os Lusíadas'?", correta: "Luís de Camões", opcoes: ["Fernando Pessoa", "Luís de Camões", "Eça de Queirós", "José Saramago"] },
     { pergunta: "Quem descobriu o Brasil?", correta: "Pedro Álvares Cabral", opcoes: ["Cristóvão Colombo", "Pedro Álvares Cabral", "Vasco da Gama", "Américo Vespúcio"] },
-    { pergunta: "Quem foi o autor de 'Dom Casmurro'?", correta: "Machado de Assis", opcoes: ["José de Alencar", "Machado de Assis", "Graciliano Ramos", "Jorge Amado"] },
-    { pergunta: "Quem foi o autor de 'O Pequeno Príncipe'?", correta: "Antoine de Saint-Exupéry", opcoes: ["Antoine de Saint-Exupéry", "Jules Verne", "Victor Hugo", "Marcel Proust"] },
-    { pergunta: "Quem foi o maior campeão mundial de boxe peso-pesado?", correta: "Muhammad Ali", opcoes: ["Mike Tyson", "Evander Holyfield", "Muhammad Ali", "George Foreman"] },
     { pergunta: "Quem foi o líder da Revolução Russa?", correta: "Vladimir Lenin", opcoes: ["Joseph Stalin", "Vladimir Lenin", "Leon Trotsky", "Mikhail Gorbachev"] },
     { pergunta: "Quem foi o famoso líder sul-africano que lutou contra o apartheid?", correta: "Nelson Mandela", opcoes: ["Nelson Mandela", "Desmond Tutu", "F.W. de Klerk", "Steve Biko"] },
     { pergunta: "Quem foi o famoso líder cubano da Revolução Cubana?", correta: "Fidel Castro", opcoes: ["Che Guevara", "Fidel Castro", "Raúl Castro", "Hugo Chávez"] },
     { pergunta: "Quem foi o famoso líder da Índia que pregou a não-violência?", correta: "Mahatma Gandhi", opcoes: ["Mahatma Gandhi", "Jawaharlal Nehru", "Indira Gandhi", "Nelson Mandela"] },
-    { pergunta: "Qual civilização antiga construiu as pirâmides do Egito?", correta: "Egípcia", opcoes: ["Egípcia", "Grega", "Romana", "Mesopotâmica"] },
     { pergunta: "Qual império foi governado por Júlio César?", correta: "Império Romano", opcoes: ["Império Romano", "Império Bizantino", "Império Otomano", "Império Persa"] },
     { pergunta: "Quem foi o imperador francês que ficou famoso por suas conquistas militares?", correta: "Napoleão Bonaparte", opcoes: ["Luís XIV", "Carlos Magno", "Napoleão Bonaparte", "Robespierre"] },
     { pergunta: "Em que continente ocorreu o apartheid?", correta: "África", opcoes: ["África", "América", "Europa", "Ásia"] },
@@ -110,10 +108,8 @@ const bancoPerguntas = {
     { pergunta: "Qual tratado marcou o fim da Primeira Guerra Mundial?", correta: "Tratado de Versalhes", opcoes: ["Tratado de Paris", "Tratado de Versalhes", "Tratado de Roma", "Tratado de Genebra"] },
     { pergunta: "Qual era o nome da aliança liderada pelos EUA durante a Guerra Fria?", correta: "OTAN", opcoes: ["OTAN", "Pacto de Varsóvia", "Liga das Nações", "ONU"] },
     { pergunta: "Qual país foi dividido em Oriental e Ocidental após a Segunda Guerra Mundial?", correta: "Alemanha", opcoes: ["Alemanha", "França", "Polônia", "Itália"] },
-    { pergunta: "Qual era o nome do muro que dividia Berlim?", correta: "Muro de Berlim", opcoes: ["Muro de Berlim", "Muro da Vergonha", "Muro de Ferro", "Muro da Guerra"] },
     { pergunta: "Qual civilização antiga é conhecida por sua filosofia e democracia?", correta: "Grega", opcoes: ["Egípcia", "Romana", "Grega", "Chinesa"] },
     { pergunta: "Quem foi o líder alemão durante a Segunda Guerra Mundial?", correta: "Adolf Hitler", opcoes: ["Adolf Hitler", "Benito Mussolini", "Joseph Stalin", "Winston Churchill"] },
-    { pergunta: "Qual era o nome do navio que afundou em 1912 após bater em um iceberg?", correta: "Titanic", opcoes: ["Titanic", "Britannic", "Olympic", "Lusitania"] },
     { pergunta: "Qual evento histórico é marcado pela queda da Bastilha?", correta: "Revolução Francesa", opcoes: ["Revolução Francesa", "Revolução Russa", "Unificação Italiana", "Independência dos EUA"] },
     { pergunta: "Quem foi o rei francês conhecido como 'Rei Sol'?", correta: "Luís XIV", opcoes: ["Luís XIV", "Luís XVI", "Carlos V", "Henrique VIII"] },
     { pergunta: "Qual civilização é conhecida por desenvolver a escrita cuneiforme?", correta: "Mesopotâmica", opcoes: ["Egípcia", "Mesopotâmica", "Chinesa", "Grega"] },
@@ -152,7 +148,14 @@ const bancoPerguntas = {
     { pergunta: "Em que ano a Revolução Industrial começou na Inglaterra?", correta: "1760", opcoes: ["1700", "1760", "1800", "1850"] },
     { pergunta: "Qual cidade era capital do Império Carolíngio?", correta: "Aachen", opcoes: ["Paris", "Aachen", "Roma", "Berlim"] },
     { pergunta: "Quem foi o primeiro imperador romano cristão?", correta: "Constantino", opcoes: ["Júlio César", "Augusto", "Constantino", "Nero"] },
-    { pergunta: "Qual civilização antiga é conhecida pelo código de leis de Hamurábi?", correta: "Babilônica", opcoes: ["Egípcia", "Assíria", "Babilônica", "Hitita"] }
+    { pergunta: "Qual civilização antiga é conhecida pelo código de leis de Hamurábi?", correta: "Babilônica", opcoes: ["Egípcia", "Assíria", "Babilônica", "Hitita"] },
+    { pergunta: "Quem foi o primeiro imperador do Brasil?", correta: "Dom Pedro I", opcoes: ["Dom Pedro I", "Dom Pedro II", "Marechal Deodoro", "Getúlio Vargas"] },
+    { pergunta: "Qual era o nome da capital do Brasil antes de Brasília?", correta: "Rio de Janeiro", opcoes: ["Salvador", "Brasília", "Rio de Janeiro", "São Paulo"] },
+    { pergunta: "Quem assinou a Lei Áurea no Brasil?", correta: "Princesa Isabel", opcoes: ["Princesa Isabel", "Dom Pedro II", "Getúlio Vargas", "Juscelino Kubitschek"] },
+    { pergunta: "Em que país nasceu Adolf Hitler?", correta: "Áustria", opcoes: ["Alemanha", "Áustria", "França", "Itália"] },
+    { pergunta: "Qual era o nome do navio que trouxe Pedro Álvares Cabral ao Brasil?", correta: "Nau Capitânia", opcoes: ["Nau Capitânia", "Santa Maria", "Mayflower", "Endeavour"] },
+    { pergunta: "Quem foi Tiradentes?", correta: "Líder da Inconfidência Mineira", opcoes: ["Líder da Inconfidência Mineira", "Imperador", "Presidente", "Explorador"] },
+    { pergunta: "Qual continente foi descoberto por Cristóvão Colombo em 1492?", correta: "América", opcoes: ["América", "Ásia", "África", "Europa"] }
 ],
   ciencia: [
     { pergunta: "Qual é o nome do maior animal terrestre?", correta: "Elefante", opcoes: ["Elefante", "Girafa", "Rinoceronte", "Hipopótamo"] },
@@ -209,7 +212,6 @@ const bancoPerguntas = {
     { pergunta: "Qual cientista propôs a teoria do Big Bang?", correta: "Georges Lemaître", opcoes: ["Isaac Newton", "Stephen Hawking", "Galileu Galilei", "Georges Lemaître"] },
     { pergunta: "Qual estrutura celular é responsável pela síntese de proteínas?", correta: "Ribossomo", opcoes: ["Lisossomo", "Mitocôndria", "Ribossomo", "Cloroplasto"] },
     { pergunta: "Qual é a principal substância responsável pelo efeito estufa?", correta: "Dióxido de carbono", opcoes: ["Metano", "Ozônio", "Dióxido de carbono", "Nitrogênio"] },
-    { pergunta: "Qual o nome da teoria que explica a deriva dos continentes?", correta: "Tectônica de placas", opcoes: ["Gravitação universal", "Tectônica de placas", "Teoria da evolução", "Big Bang"] },
     { pergunta: "Qual hormônio regula os níveis de açúcar no sangue?", correta: "Insulina", opcoes: ["Insulina", "Adrenalina", "Cortisol", "Testosterona"] },
     { pergunta: "Qual é o número atômico do oxigênio?", correta: "8", opcoes: ["6", "8", "10", "12"] },
     { pergunta: "Qual é o nome do processo em que um líquido se transforma diretamente em gás?", correta: "Evaporação", opcoes: ["Fusão", "Evaporação", "Sublimação", "Condensação"] },
@@ -224,10 +226,11 @@ const bancoPerguntas = {
     { pergunta: "Qual é o nome da glândula responsável pelo crescimento do corpo?", correta: "Hipófise", opcoes: ["Tireoide", "Hipófise", "Pâncreas", "Adrenal"] },
     { pergunta: "Como se chama o fenômeno em que a luz muda de direção ao passar de um meio para outro?", correta: "Refração", opcoes: ["Reflexão", "Refração", "Dispersão", "Absorção"] },
     { pergunta: "Qual é o nome do ácido presente no estômago humano?", correta: "Ácido clorídrico", opcoes: ["Ácido sulfúrico", "Ácido clorídrico", "Ácido acético", "Ácido lático"] },
-    { pergunta: "Qual é o nome da camada da Terra localizada abaixo da crosta?", correta: "Manto", opcoes: ["Núcleo", "Crosta", "Manto", "Litosfera"] }
+    { pergunta: "Qual é o nome da camada da Terra localizada abaixo da crosta?", correta: "Manto", opcoes: ["Núcleo", "Crosta", "Manto", "Litosfera"] },
+    { pergunta: "Qual é o nome do processo de transformação de uma substância sólida diretamente em gás?", correta: "Sublimação", opcoes: ["Condensação", "Evaporação", "Sublimação", "Fusão"] },
+    { pergunta: "Qual é o nome do fenômeno que ocorre quando a luz branca é separada em várias cores?", correta: "Dispersão", opcoes: ["Refração", "Reflexão", "Dispersão", "Absorção"] }, 
 ],
   esportes: [
-    { pergunta: "Quem perdeu um pênalti na final da Copa de 1994?", correta: "Roberto Baggio", opcoes: ["Romário", "Bebeto", "Roberto Baggio", "Zidane"] },
     { pergunta: "Quem foi campeão da Copa do Mundo de 2006?", correta: "Itália", opcoes: ["França", "Itália", "Alemanha", "Brasil"] },
     { pergunta: "Quem é o jogador com mais gols na história da Copa do Mundo?", correta: "Klose", opcoes: ["Pelé", "Klose", "Cristiano Ronaldo", "Kaká"] },
     { pergunta: "Qual é o time de futebol com mais títulos da Champions League?", correta: "Real Madrid", opcoes: ["Barcelona", "Bayern de Munique", "Real Madrid", "Liverpool"] },
@@ -235,10 +238,8 @@ const bancoPerguntas = {
     { pergunta: "Quem perdeu um pênalti na final da Copa de 1994?", correta: "Roberto Baggio", opcoes: ["Romário", "Bebeto", "Roberto Baggio", "Zidane"] },
     { pergunta: "Qual é o único país que participou de todas as Copas do Mundo?", correta: "Brasil", opcoes: ["Alemanha", "Argentina", "Brasil", "Itália"] },
     { pergunta: "Qual clube brasileiro é conhecido como 'Timão'?", correta: "Corinthians", opcoes: ["Palmeiras", "São Paulo", "Corinthians", "Santos"] },
-    { pergunta: "Quem é conhecido como o 'Rei do Futebol'?", correta: "Pelé", opcoes: ["Pelé", "Garrincha", "Zico", "Romário"] },
     { pergunta: "Em qual país foi realizada a Copa do Mundo de 2018?", correta: "Rússia", opcoes: ["Brasil", "Rússia", "Alemanha", "Catar"] },
-    { pergunta: "Qual jogador é apelidado de 'Fenômeno'?", correta: "Ronaldo", opcoes: ["Ronaldinho", "Ronaldo", "Romário", "Kaká"] },
-    { pergunta: "Qual jogador tem mais gols na história da Seleção Brasileira?", correta: "Pelé", opcoes: ["Pelé", "Neymar", "Zico", "Romário"] },
+    { pergunta: "Quantos jogadores atuam simultaneamente no futebol de salão (futsal)?", correta: "5", opcoes: ["5", "6", "7", "8"] },
     { pergunta: "Qual atleta ganhou mais medalhas olímpicas da história?", correta: "Michael Phelps", opcoes: ["Usain Bolt", "Michael Phelps", "Carl Lewis", "Mark Spitz"] },
     { pergunta: "Qual é o apelido do lutador Anderson Silva?", correta: "The Spider", opcoes: ["The Beast", "The Spider", "The Phenom", "The Machine"] },
     { pergunta: "Qual país é mais vitorioso no basquete olímpico?", correta: "Estados Unidos", opcoes: ["Espanha", "Argentina", "Estados Unidos", "Lituânia"] },
@@ -247,36 +248,30 @@ const bancoPerguntas = {
     { pergunta: "Quem foi campeão da Fórmula 1 em 2021?", correta: "Max Verstappen", opcoes: ["Lewis Hamilton", "Max Verstappen", "Sebastian Vettel", "Charles Leclerc"] },
     { pergunta: "Qual time venceu a Libertadores de 2021?", correta: "Palmeiras", opcoes: ["Flamengo", "Palmeiras", "Atlético-MG", "River Plate"] },
     { pergunta: "Qual esporte é jogado com uma peteca?", correta: "Badminton", opcoes: ["Squash", "Tênis", "Badminton", "Handebol"] },
-    { pergunta: "Qual jogador brasileiro é apelidado de 'Gaúcho'?", correta: "Ronaldinho", opcoes: ["Ronaldinho", "Romário", "Cafu", "Zico"] },
     { pergunta: "Qual esporte tem um movimento chamado 'ippon'?", correta: "Judô", opcoes: ["Karatê", "Judô", "Taekwondo", "Capoeira"] },
     { pergunta: "Quantos jogadores cada time tem no voleibol em quadra?", correta: "6", opcoes: ["5", "6", "7", "8"] },
     { pergunta: "Qual país venceu a Copa do Mundo de Futebol Feminino em 2019?", correta: "Estados Unidos", opcoes: ["Alemanha", "Brasil", "Estados Unidos", "França"] },
     { pergunta: "Quem é o maior artilheiro da história da Champions League?", correta: "Cristiano Ronaldo", opcoes: ["Cristiano Ronaldo", "Messi", "Lewandowski", "Benzema"] },
     { pergunta: "Qual é o nome da liga de futebol dos EUA?", correta: "MLS", opcoes: ["USFL", "MLS", "NFL", "USML"] },
     { pergunta: "Qual é a principal competição de clubes da América do Sul?", correta: "Copa Libertadores", opcoes: ["Copa Sul-Americana", "Brasileirão", "Copa Libertadores", "Recopa"] },
-    { pergunta: "Em que país está localizado o Circuito de Interlagos?", correta: "Brasil", opcoes: ["Brasil", "Argentina", "Espanha", "México"] },
     { pergunta: "Quem foi o maior campeão mundial de boxe peso-pesado?", correta: "Muhammad Ali", opcoes: ["Mike Tyson", "Evander Holyfield", "Muhammad Ali", "George Foreman"] },
     { pergunta: "Qual país sediou as Olimpíadas de 2016?", correta: "Brasil", opcoes: ["China", "Brasil", "Grécia", "Reino Unido"] },
-    { pergunta: "Quem é o camisa 10 histórico do Santos?", correta: "Pelé", opcoes: ["Pelé", "Robinho", "Neymar", "Diego"] },
-    { pergunta: "Qual esporte usa o termo 'strike'?", correta: "Boliche", opcoes: ["Tênis", "Golfe", "Boliche", "Críquete"] },
+    { pergunta: "Qual é a maior pontuação possível no boliche?", correta: "300 pontos", opcoes: ["250 pontos", "280 pontos", "300 pontos", "320 pontos"] },
     { pergunta: "Qual é o esporte praticado por Gabriel Medina?", correta: "Surfe", opcoes: ["Surfe", "Skate", "Natação", "Windsurf"] },
     { pergunta: "Qual jogador é conhecido como 'Imperador'?", correta: "Adriano", opcoes: ["Adriano", "Kaká", "Ronaldinho", "Fred"] },
     { pergunta: "Qual seleção venceu a Eurocopa de 2020 (realizada em 2021)?", correta: "Itália", opcoes: ["Inglaterra", "França", "Itália", "Alemanha"] },
     { pergunta: "Qual clube é conhecido como 'Galo'?", correta: "Atlético Mineiro", opcoes: ["Atlético Paranaense", "Atlético Mineiro", "Goiás", "Bahia"] },
     { pergunta: "Qual clube venceu a primeira Copa do Mundo de Clubes da FIFA?", correta: "Corinthians", opcoes: ["Real Madrid", "Boca Juniors", "Corinthians", "Liverpool"] },
     { pergunta: "Quantos minutos dura uma partida oficial de futebol?", correta: "90 minutos", opcoes: ["60 minutos", "90 minutos", "80 minutos", "100 minutos"] },
-    { pergunta: "Quantos pontos vale uma cesta de três no basquete?", correta: "3 pontos", opcoes: ["1 ponto", "2 pontos", "3 pontos", "4 pontos"] },
     { pergunta: "Em qual país nasceu o futebol moderno?", correta: "Inglaterra", opcoes: ["Brasil", "Alemanha", "Inglaterra", "Itália"] },
-    { pergunta: "Em qual esporte se usa uma vara para saltar?", correta: "Salto com vara", opcoes: ["Salto triplo", "Salto em altura", "Salto com vara", "Decatlo"] },
     { pergunta: "Qual tenista tem mais títulos de Grand Slam até 2023?", correta: "Novak Djokovic", opcoes: ["Roger Federer", "Rafael Nadal", "Novak Djokovic", "Andy Murray"] },
     { pergunta: "Em que esporte se destacou o atleta Marat Safin?", correta: "Tênis", opcoes: ["Tênis", "Xadrez", "Golfe", "Boxe"] },
     { pergunta: "Qual país venceu a Copa do Mundo Sub-20 de 2023?", correta: "Uruguai", opcoes: ["Brasil", "Uruguai", "Itália", "Nigéria"] },
     { pergunta: "Qual é o nome da principal liga de basquete dos EUA?", correta: "NBA", opcoes: ["NFL", "MLB", "NBA", "MLS"] },
-    { pergunta: "Quem foi o maior goleador da história do Campeonato Brasileiro até 2023?", correta: "Roberto Dinamite", opcoes: ["Zico", "Fred", "Romário", "Roberto Dinamite"] },
+    { pergunta: "Quem foi o maior goleador da história do Campeonato Brasileiro?", correta: "Roberto Dinamite", opcoes: ["Zico", "Fred", "Romário", "Roberto Dinamite"] },
     { pergunta: "Qual é o esporte olímpico que combina esqui e tiro ao alvo?", correta: "Biathlon", opcoes: ["Triatlo", "Pentatlo moderno", "Biathlon", "Decatlo"] },
     { pergunta: "Qual jogador brasileiro é conhecido pelo apelido 'O Animal'?", correta: "Edmundo", opcoes: ["Romário", "Edmundo", "Túlio", "Viola"] },
     { pergunta: "Quantas voltas tem uma corrida oficial de Fórmula 1, em média?", correta: "Entre 50 e 70", opcoes: ["30", "40", "Entre 50 e 70", "Mais de 100"] },
-    { pergunta: "Em que país foi fundada a Confederação Brasileira de Futebol (CBF)?", correta: "Brasil", opcoes: ["Argentina", "Portugal", "Brasil", "Uruguai"] },
     { pergunta: "Qual país sediou os Jogos Olímpicos de Inverno de 2022?", correta: "China", opcoes: ["Japão", "Canadá", "Noruega", "China"] },
     { pergunta: "Quantas Copas do Mundo o técnico Vicente del Bosque venceu com a Espanha?", correta: "1", opcoes: ["0", "1", "2", "3"] },
     { pergunta: "Em que ano a Argentina venceu sua primeira Copa do Mundo?", correta: "1978", opcoes: ["1986", "1930", "1978", "1990"] },
@@ -288,7 +283,7 @@ const bancoPerguntas = {
     { pergunta: "Qual país venceu a primeira edição da Copa do Mundo em 1930?", correta: "Uruguai", opcoes: ["Brasil", "Argentina", "Uruguai", "Itália"] },
     { pergunta: "Em que ano o basquete passou a fazer parte das Olimpíadas?", correta: "1936", opcoes: ["1948", "1936", "1924", "1960"] },
     { pergunta: "Quem foi o último brasileiro a ganhar o prêmio de Melhor do Mundo da FIFA antes de 2024?", correta: "Kaká", opcoes: ["Ronaldinho", "Kaká", "Neymar", "Romário"] },
-    { pergunta: "Quantos títulos da Libertadores o Boca Juniors possui até 2023?", correta: "6", opcoes: ["5", "6", "7", "8"] },
+    { pergunta: "Quantos títulos da Libertadores o Boca Juniors possui?", correta: "6", opcoes: ["5", "6", "7", "8"] },
     { pergunta: "Qual seleção foi eliminada na fase de grupos da Copa do Mundo de 2002 sendo campeã em 1998?", correta: "França", opcoes: ["Alemanha", "França", "Brasil", "Argentina"] },
     { pergunta: "Quem é o maior vencedor do Tour de France na história?", correta: "Eddy Merckx", opcoes: ["Lance Armstrong", "Eddy Merckx", "Chris Froome", "Bernard Hinault"] },
     { pergunta: "Quantos jogadores um time de rúgbi tem em campo?", correta: "15", opcoes: ["11", "13", "15", "16"] },
@@ -297,14 +292,22 @@ const bancoPerguntas = {
     { pergunta: "Quem é o maior pontuador da história da NBA?", correta: "LeBron James", opcoes: ["Kobe Bryant", "Michael Jordan", "LeBron James", "Kareem Abdul-Jabbar"] },
     { pergunta: "Qual cidade brasileira sediou os Jogos Pan-Americanos de 2007?", correta: "Rio de Janeiro", opcoes: ["São Paulo", "Brasília", "Rio de Janeiro", "Belo Horizonte"] },
     { pergunta: "Quantas Copas Libertadores o Santos de Pelé venceu?", correta: "2", opcoes: ["1", "2", "3", "4"] },
-    { pergunta: "Em que país foi criado o esporte hóquei no gelo?", correta: "Canadá", opcoes: ["Estados Unidos", "Rússia", "Canadá", "Suécia"] }
+    { pergunta: "Em que país foi criado o esporte hóquei no gelo?", correta: "Canadá", opcoes: ["Estados Unidos", "Rússia", "Canadá", "Suécia"] },
+    { pergunta: "Qual país sediou a primeira edição dos Jogos Olímpicos da Era Moderna em 1896?", correcta: "Grécia", opcoes: ["França", "Alemanha", "Grécia", "Inglaterra"] },
+    { pergunta: "Qual país venceu a Copa América de 2021?", correta: "Argentina", opcoes: ["Brasil", "Argentina", "Uruguai", "Chile"] },
+    { pergunta: "Em qual cidade foi realizada a final da Copa do Mundo de 2014?", correta: "Rio de Janeiro", opcoes: ["São Paulo", "Rio de Janeiro", "Brasília", "Belo Horizonte"] },
+    { pergunta: "Qual ginasta brasileira conquistou medalha de prata nas Olimpíadas de 2020?", correta: "Rebeca Andrade", opcoes: ["Daiane dos Santos", "Jade Barbosa", "Rebeca Andrade", "Daniele Hypólito"] },
+    { pergunta: "Qual é o nome do estádio do Borussia Dortmund?", correta: "Signal Iduna Park", opcoes: ["Allianz Arena", "Signal Iduna Park", "Old Trafford", "San Siro"] },
+    { pergunta: "Quem foi o maior campeão da Fórmula Indy?", correta: "Rick Mears", opcoes: ["Rick Mears", "Ayrton Senna", "Emerson Fittipaldi", "Helio Castroneves"] },
+    { pergunta: "Qual seleção masculina de vôlei foi campeã olímpica em 2016?", correta: "Brasil", opcoes: ["Itália", "Brasil", "Rússia", "Estados Unidos"] },
+    { pergunta: "Qual país é o maior vencedor da Copa do Mundo de Rugby?", correta: "Nova Zelândia", opcoes: ["Inglaterra", "África do Sul", "Nova Zelândia", "Austrália"] },
+    { pergunta: "Quem é o maior medalhista brasileiro em Jogos Pan-Americanos?", correta: "Thiago Pereira", opcoes: ["Cesar Cielo", "Thiago Pereira", "Gustavo Borges", "Hugo Hoyama"] }
   ],
   cultura: [
     { pergunta: "Quem pintou a Mona Lisa?", correta: "Leonardo da Vinci", opcoes: ["Pablo Picasso", "Vincent van Gogh", "Leonardo da Vinci", "Claude Monet"] },
     { pergunta: "Quem escreveu 'Dom Quixote'?", correta: "Miguel de Cervantes", opcoes: ["Gabriel García Márquez", "Jorge Luis Borges", "Miguel de Cervantes", "William Shakespeare"] },
     { pergunta: "Quem escreveu a obra 'Romeu e Julieta'?", correta: "William Shakespeare", opcoes: ["Mark Twain", "Jane Austen", "William Shakespeare", "Charles Dickens"] },
     { pergunta: "Quem pintou o teto da Capela Sistina?", correta: "Michelangelo", opcoes: ["Leonardo da Vinci", "Raphael", "Michelangelo", "Donatello"] },
-    { pergunta: "Quem foi o autor de 'Os Lusíadas'?", correta: "Luís de Camões", opcoes: ["Fernando Pessoa", "Luís de Camões", "Eça de Queirós", "José Saramago"] },
     { pergunta: "Quem escreveu '1984'?", correta: "George Orwell", opcoes: ["Aldous Huxley", "Ray Bradbury", "George Orwell", "Isaac Asimov"] },
     { pergunta: "Quem foi o autor de 'Dom Casmurro'?", correta: "Machado de Assis", opcoes: ["José de Alencar", "Machado de Assis", "Graciliano Ramos", "Jorge Amado"] },
     { pergunta: "Quem foi o autor de 'O Pequeno Príncipe'?", correta: "Antoine de Saint-Exupéry", opcoes: ["Antoine de Saint-Exupéry", "Jules Verne", "Victor Hugo", "Marcel Proust"] },
@@ -349,7 +352,7 @@ const bancoPerguntas = {
     { pergunta: "Quem escreveu 'O Príncipe'?", correta: "Maquiavel", opcoes: ["Aristóteles", "Maquiavel", "Platão", "Rousseau"] },
     { pergunta: "Qual é o nome da ópera composta por Georges Bizet sobre uma cigana?", correta: "Carmen", opcoes: ["Carmen", "La Traviata", "O Barbeiro de Sevilha", "Turandot"] },
     { pergunta: "Qual é o nome da peça teatral mais conhecida de Sófocles?", correta: "Édipo Rei", opcoes: ["Édipo Rei", "Antígona", "As Bacantes", "Medeia"] },
-    { pergunta: "Qual é o nome do movimento artístico que surgiu como resposta à Primeira Guerra Mundial e é conhecido pela sua crítica ao racionalismo?", correta: "Dadaísmo", opcoes: ["Dadaísmo", "Surrealismo", "Expressionismo", "Impressionismo"] },
+    { pergunta: "Qual é o nome do movimento artístico que atravessou a Primeira Guerra Mundial e é conhecido pela sua crítica ao racionalismo?", correta: "Dadaísmo", opcoes: ["Dadaísmo", "Surrealismo", "Expressionismo", "Impressionismo"] },
     { pergunta: "Qual é o nome do escritor tcheco que escreveu 'O Processo'?", correta: "Franz Kafka", opcoes: ["Franz Kafka", "Albert Camus", "Jean-Paul Sartre", "Thomas Mann"] },
     { pergunta: "Qual filósofo escreveu 'Assim Falou Zaratustra'?", correta: "Friedrich Nietzsche", opcoes: ["Karl Marx", "Friedrich Nietzsche", "Jean-Paul Sartre", "Immanuel Kant"] },
     { pergunta: "Qual arquiteto brasileiro projetou Brasília?", correta: "Oscar Niemeyer", opcoes: ["Lúcio Costa", "Oscar Niemeyer", "Roberto Burle Marx", "Ruy Ohtake"] },
@@ -369,15 +372,16 @@ const bancoPerguntas = {
     { pergunta: "Qual é o nome da obra de arte criada por Marcel Duchamp que consiste em um mictório assinado?", correta: "Fonte", opcoes: ["Fonte", "O Grande Vidro", "A Roda de Bicicleta", "O Ready-made"] },
     { pergunta: "Qual é o nome do escritor italiano autor de 'A Divina Comédia'?", correta: "Dante Alighieri", opcoes: ["Giovanni Boccaccio", "Dante Alighieri", "Petrarca", "Maquiavel"] },
     { pergunta: "Qual é o nome do principal livro sagrado do hinduísmo?", correta: "Bhagavad Gita", opcoes: ["Bhagavad Gita", "Alcorão", "Torá", "Tripitaka"] },
-    { pergunta: "Qual é o nome da ópera de Verdi baseada em uma peça de Shakespeare?", correta: "Otelo", opcoes: ["Otelo", "Aida", "Rigoletto", "La Traviata"] }
+    { pergunta: "Qual é o nome da ópera de Verdi baseada em uma peça de Shakespeare?", correta: "Otelo", opcoes: ["Otelo", "Aida", "Rigoletto", "La Traviata"] },
+    { pergunta: "Qual o nome do famoso museu onde está exposta a Mona Lisa?", correta: "Museu do Louvre", opcoes: ["Museu do Prado", "Museu do Vaticano", "Museu do Louvre", "Museu Britânico"] },
+    { pergunta: "Quem é o autor da obra 'Memórias Póstumas de Brás Cubas'?", correta: "Machado de Assis", opcoes: ["José de Alencar", "Machado de Assis", "Jorge Amado", "Graciliano Ramos"] }
   ]
 };
 
 // Banco de Perguntas de Verdadeiro ou Falso
 const bancoPerguntasVF = {
   geografia: [
-      { pergunta: "O Brasil é o maior país da América do Sul?", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-      { pergunta: "A capital do Brasil é São Paulo?", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A capital do Brasil é Brasília." },
+      { pergunta: "A capital do Brasil é Rio de Janeiro?", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A capital do Brasil é Brasília." },
       { pergunta: "O Deserto do Saara é o maior deserto do mundo?", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
       { pergunta: "A Rússia é o maior país do mundo em extensão territorial?", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
       { pergunta: "O Oceano Atlântico é maior que o Oceano Pacífico?", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Oceano Pacífico é o maior oceano do mundo." },
@@ -393,7 +397,7 @@ const bancoPerguntasVF = {
       { pergunta: "O Himalaia está localizado na Europa.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Himalaia está localizado na Ásia." },
       { pergunta: "Existem vulcões ativos no Brasil.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Não há vulcões ativos no Brasil atualmente." },
       { pergunta: "O Polo Norte está localizado na água do Oceano Ártico.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-      { pergunta: "O Equador divide o planeta em hemisférios norte e sul.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "A linha do Equador divide o planeta em hemisférios norte e sul.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
       { pergunta: "Tóquio é a capital da China.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Tóquio é a capital do Japão. A capital da China é Pequim." },
       { pergunta: "A Cordilheira dos Andes passa pelo Chile.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
       { pergunta: "A maioria dos desertos está localizada próxima à linha do Equador.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A maioria dos desertos está em zonas subtropicais, não próximas à linha do Equador." },
@@ -412,7 +416,6 @@ const bancoPerguntasVF = {
       { pergunta: "O clima equatorial é quente e úmido o ano todo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
       { pergunta: "A Itália é um país em formato de bota.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
       { pergunta: "A Islândia possui vários vulcões ativos.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-      { pergunta: "O planeta Terra possui apenas um continente.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Terra possui sete continentes." },
       { pergunta: "O rio São Francisco atravessa o deserto do Saara.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O rio São Francisco está no Brasil. O Saara está na África." },
       { pergunta: "A capital da Argentina é Buenos Aires.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
       { pergunta: "O continente americano é dividido em três partes: norte, central e sul.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
@@ -445,11 +448,13 @@ const bancoPerguntasVF = {
       { pergunta: "A maioria das florestas temperadas está localizada nos trópicos.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "As florestas temperadas estão localizadas em regiões de clima temperado, não nos trópicos." },
       { pergunta: "A cidade de Istambul está localizada em dois continentes.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
       { pergunta: "O Mar de Aral tem aumentado seu volume nos últimos anos.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Mar de Aral tem diminuído devido à intervenção humana." },
-      { pergunta: "O paralelo 45ºN está exatamente no meio entre o Equador e o Polo Norte.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] }
+      { pergunta: "O paralelo 45ºN está exatamente no meio entre o Equador e o Polo Norte.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "O Canal de Suez liga o Mar Mediterrâneo ao Mar Vermelho.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+      { pergunta: "A Islândia está localizada no Círculo Polar Ártico.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Islândia está próxima, mas não dentro do Círculo Polar Ártico." },
+      { pergunta: "O Deserto de Gobi está localizado na Ásia.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] }
     ],
   
   historia: [
-    { pergunta: "A Segunda Guerra Mundial terminou em 1945.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "A Segunda Guerra Mundial terminou em 1945.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "Napoleão Bonaparte foi imperador da Alemanha.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Napoleão foi imperador da França, não da Alemanha." },
     { pergunta: "A Revolução Francesa começou em 1789.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
@@ -472,7 +477,6 @@ const bancoPerguntasVF = {
     { pergunta: "A Era Vargas começou em 1945.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Era Vargas começou em 1930, com a Revolução que depôs Washington Luís." },
     { pergunta: "A independência dos Estados Unidos foi declarada em 1776.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "O feudalismo predominou na Europa durante a Idade Moderna.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O feudalismo predominou na Idade Média; na Idade Moderna surgiram os Estados Nacionais." },
-    { pergunta: "Adolf Hitler liderou o Partido Nazista na Alemanha.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "A Batalha de Waterloo marcou a derrota de Napoleão.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "A Revolução Farroupilha ocorreu no estado da Bahia.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Revolução Farroupilha ocorreu no Rio Grande do Sul." },
     { pergunta: "Os vikings eram originários da Escandinávia.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
@@ -519,7 +523,9 @@ const bancoPerguntasVF = {
     { pergunta: "A Crise de 1929 teve início com o colapso da bolsa de valores de Londres.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A crise teve início com a quebra da bolsa de valores de Nova York." },
     { pergunta: "A Guerra da Crimeia envolveu o Império Russo contra uma aliança formada por Reino Unido, França, Império Otomano e Sardenha.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "A Doutrina Truman visava conter a expansão do comunismo durante a Guerra Fria.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "O movimento sufragista feminino surgiu no século XIX em países da América Latina.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O movimento sufragista feminino surgiu no século XIX em países como Reino Unido e Estados Unidos." }
+    { pergunta: "O movimento sufragista feminino surgiu no século XIX em países da América Latina.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O movimento sufragista feminino surgiu no século XIX em países como Reino Unido e Estados Unidos." },
+    { pergunta: "A Revolução Mexicana começou em 1910 e resultou em profundas mudanças sociais no México.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Guerra dos Farrapos foi um conflito que ocorreu no Nordeste do Brasil.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Guerra dos Farrapos ocorreu no Rio Grande do Sul, região Sul do Brasil." }
     ],
   ciencia: [
     { pergunta: "A água é composta por dois átomos de hidrogênio e um de oxigênio.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
@@ -613,38 +619,14 @@ const bancoPerguntasVF = {
     { pergunta: "Neymar começou sua carreira profissional no Santos.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "O remo é um esporte aquático olímpico.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "O judô foi criado no Japão.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "As Olimpíadas de Inverno incluem esportes como esqui e hóquei no gelo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "O maratona tem 10 km de distância.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A maratona tem 42,195 km de distância." },
     { pergunta: "Lionel Messi jogou a maior parte da carreira no Barcelona.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "O handebol é jogado com os pés.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O handebol é jogado com as mãos, como o nome indica." },
     { pergunta: "A ginástica artística é um esporte olímpico.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "O Tour de France é uma competição de ciclismo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "O Brasil nunca ganhou medalha de ouro no vôlei olímpico.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Brasil já conquistou várias medalhas de ouro no vôlei olímpico." },
-    { pergunta: "O boxe é um esporte de contato físico.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "O futebol americano é o esporte mais popular dos EUA.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "O skate entrou nas Olimpíadas em 2016.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O skate entrou nas Olimpíadas em Tóquio 2020." },
-    { pergunta: "Zico foi um dos maiores jogadores da história do Flamengo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "O beisebol é um esporte muito popular no Japão.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "Ronaldinho Gaúcho venceu a Bola de Ouro da FIFA.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "O Brasil já ganhou cinco Copas do Mundo de futebol.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "Natação é um dos esportes mais antigos das Olimpíadas.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "O atletismo é composto apenas por corrida de 100 metros.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O atletismo inclui várias modalidades, como saltos, lançamentos e diversas corridas." },
-    { pergunta: "O tênis de mesa é também chamado de pingue-pongue.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "O UFC é uma competição de luta livre greco-romana.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O UFC é uma competição de artes marciais mistas (MMA), não luta greco-romana." },
-    { pergunta: "A Copa Libertadores é um torneio europeu de futebol.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Copa Libertadores é um torneio sul-americano de clubes." },
-    { pergunta: "A Argentina já foi campeã mundial de futebol.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "A principal liga de basquete dos EUA é a NFL.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A NFL é a liga de futebol americano; a principal liga de basquete é a NBA." },
-    { pergunta: "O rugby e o futebol americano têm regras muito semelhantes.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Embora pareçam semelhantes, rugby e futebol americano têm regras bem diferentes." },
-    { pergunta: "O tênis é jogado em quadras de diferentes superfícies.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "O goleiro é o único jogador que pode usar as mãos no futebol.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "O Mundial de Clubes é disputado apenas por times europeus.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Mundial de Clubes reúne campeões continentais de várias regiões, não só da Europa." },
-    { pergunta: "Michael Phelps é o maior medalhista olímpico da história.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "O basquete é jogado com dois times de 7 jogadores.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O basquete é jogado com dois times de 5 jogadores em quadra." },
-    { pergunta: "Na Fórmula 1, o piloto Ayrton Senna venceu três campeonatos mundiais.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "O Brasil nunca ganhou medalha olímpica no judô.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Brasil já conquistou diversas medalhas olímpicas no judô." },
     { pergunta: "O futebol é o esporte mais praticado do mundo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "Maradona é considerado um dos maiores jogadores da Argentina.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "A Eurocopa é um torneio entre seleções da Ásia.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Eurocopa é um torneio entre seleções da Europa." },
     { pergunta: "O Grand Slam de Roland Garros é disputado em quadra de saibro.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "O recorde mundial dos 100 metros rasos pertence a Usain Bolt.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "O Brasil conquistou sua primeira medalha olímpica no futebol masculino em 2016.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
@@ -664,30 +646,45 @@ const bancoPerguntasVF = {
     { pergunta: "O hóquei sobre grama é um esporte olímpico.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "O Brasil já foi campeão mundial de futsal da FIFA.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "O All Blacks é o apelido da seleção de rugby da Nova Zelândia.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    {pergunta: "O badminton é um esporte que se joga com raquetes e uma peteca.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] }
+    { pergunta: "O badminton é um esporte que se joga com raquetes e uma peteca.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Copa Libertadores é a principal competição de clubes da América do Sul.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Tour de France é uma competição de automobilismo.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Tour de France é uma competição de ciclismo." },
+    { pergunta: "A maratona olímpica tem exatamente 50 km.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A maratona tem 42,195 km." },
+    { pergunta: "O Brasil já foi campeão mundial de vôlei masculino.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Copa do Mundo de Rugby já foi realizada no Brasil.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Brasil nunca sediou a Copa do Mundo de Rugby." },
+    { pergunta: "O Grand Slam de Wimbledon é disputado em quadra de grama.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O boxe é um esporte olímpico.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Brasil já ganhou medalha de ouro olímpica no vôlei de praia.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O futebol americano é o esporte mais popular dos Estados Unidos.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O judô foi criado na China.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O judô foi criado no Japão." },
+    { pergunta: "O Gabriel Medina é campeão mundial de surf.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Brasil já foi campeão mundial de handebol masculino.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Brasil nunca foi campeão mundial de handebol masculino." },
+    { pergunta: "A ginástica artística inclui provas de solo, salto e barras.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O críquete é muito popular na Austrália.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Copa Davis é uma competição de futebol.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Copa Davis é uma competição de tênis." },
+    { pergunta: "O Brasil já foi campeão mundial de basquete feminino.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O pentatlo moderno inclui tiro com arco.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Inclui tiro esportivo com pistola, não arco." },
+    { pergunta: "A Major League Soccer (MLS) é a principal liga de futebol dos EUA.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O salto em distância é uma prova do atletismo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Brasil já sediou a Copa do Mundo de futebol duas vezes.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Brasil sediou em 1950 e 2014." },
+    { pergunta: "O rugby é jogado com uma bola oval.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O tênis de mesa é conhecido como pingue-pongue.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Brasil já ganhou medalha olímpica no basquete feminino.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Copa do Mundo de futebol feminino foi criada antes da masculina.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Copa do Mundo masculina foi criada em 1930 e a feminina em 1991." },
+    { pergunta: "O decatlo é uma prova do atletismo composta por dez modalidades diferentes, incluindo salto com vara e lançamento de disco.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] }
   ],
   cultura: [
     { pergunta: "Machado de Assis é um dos maiores escritores da literatura brasileira.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "O samba é um ritmo musical típico da Alemanha.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O samba é um ritmo musical típico do Brasil." },
-    { pergunta: "O Oscar é uma premiação do cinema mundial.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"]},
     { pergunta: "William Shakespeare foi um dramaturgo inglês.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "O Cristo Redentor é uma das sete maravilhas do mundo moderno.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "A música clássica é originária da América do Sul.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A música clássica tem suas raízes na Europa." },
-    { pergunta: "A Capoeira é uma expressão cultural brasileira que mistura dança e luta.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "Pablo Picasso foi um famoso pintor espanhol.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "O Festival de Cannes acontece no Japão.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Festival de Cannes acontece na França." },
-    { pergunta: "A feijoada é um prato tradicional brasileiro.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "O carnaval do Rio de Janeiro é um dos maiores do mundo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "A Monalisa foi pintada por Leonardo da Vinci.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "Reggae é um estilo musical originário da Jamaica.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "O Natal é comemorado no dia 31 de dezembro.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Natal é comemorado no dia 25 de dezembro." },
     { pergunta: "Harry Potter é uma obra da autora britânica J.K. Rowling.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "O tango é uma dança típica da Argentina.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "A cultura indígena brasileira não influencia a culinária nacional.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A cultura indígena tem grande influência na culinária brasileira, como o uso de ingredientes nativos." },
-    { pergunta: "A Festa Junina é uma celebração tradicional brasileira.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "A língua portuguesa é falada em mais de 10 países.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "O Halloween é uma festa tradicional brasileira.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "O Halloween é uma festa de origem americana, celebrada em 31 de outubro." },
-    { pergunta: "Vinícius de Moraes foi poeta e compositor brasileiro.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "Hollywood é o centro da indústria cinematográfica dos EUA.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "Os Beatles foram uma banda formada nos Estados Unidos.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Os Beatles foram uma banda britânica formada em Liverpool." },
     { pergunta: "A literatura de cordel é uma manifestação cultural do Norte do Brasil.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A literatura de cordel é uma manifestação cultural do Nordeste do Brasil." },
@@ -696,12 +693,10 @@ const bancoPerguntasVF = {
     { pergunta: "A arte barroca teve grande influência no Brasil colonial.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "A feitiçaria é um dos temas recorrentes da literatura fantástica.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "A mitologia grega influenciou diversas obras artísticas e literárias ocidentais.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "Chico Buarque é um compositor e escritor brasileiro.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "A bossa nova nasceu na Argentina.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A bossa nova é um gênero musical brasileiro, surgido no Rio de Janeiro." },
     { pergunta: "O Museu do Louvre está localizado em Paris.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "A Bienal do Livro acontece apenas no exterior.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Bienal do Livro acontece em várias cidades, incluindo São Paulo e Rio de Janeiro." },
     { pergunta: "O teatro grego surgiu como uma forma de homenagear os deuses.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "O samba-enredo é utilizado durante os desfiles das escolas de samba.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "A cultura japonesa é conhecida pelo uso de máscaras no teatro Nô.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "A cultura popular não se transmite oralmente.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A cultura popular é frequentemente transmitida oralmente, através de histórias, músicas e tradições." },
     { pergunta: "A música sertaneja surgiu no interior do Brasil.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
@@ -727,7 +722,6 @@ const bancoPerguntasVF = {
     { pergunta: "O Dia dos Mortos é uma celebração tradicional do México.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "O escritor Dostoiévski escreveu 'Guerra e Paz'.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "'Guerra e Paz' foi escrito por Liev Tolstói." },
     { pergunta: "O balé clássico surgiu na Itália durante o Renascimento.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "O escritor Haruki Murakami é japonês.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "O festival Oktoberfest tem origem na Alemanha.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "O escritor Jorge Luis Borges nasceu no Chile.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "Borges nasceu na Argentina." },
     { pergunta: "O filme 'Cidadão Kane' é considerado um clássico do cinema mundial.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
@@ -737,124 +731,157 @@ const bancoPerguntasVF = {
     { pergunta: "O festival de cinema de Veneza é o mais antigo do mundo.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
     { pergunta: "A literatura de cordel é tradicionalmente impressa em folhas coloridas.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A literatura de cordel é tradicionalmente impressa em folhetos de papel simples, geralmente preto e branco." },
     { pergunta: "O escritor José Saramago foi o único autor de língua portuguesa a ganhar o Nobel de Literatura.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
-    { pergunta: "O tango argentino foi declarado Patrimônio Cultural Imaterial da Humanidade pela UNESCO.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] }
+    { pergunta: "O tango argentino foi declarado Patrimônio Cultural Imaterial da Humanidade pela UNESCO.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O escritor Jorge Amado nasceu no estado da Bahia.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O samba-enredo é um gênero musical criado para o Carnaval do Rio de Janeiro.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Oscar é o principal prêmio do cinema mundial.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "A Capela Sistina foi pintada por Leonardo da Vinci.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "A Capela Sistina foi pintada por Michelangelo." },
+    { pergunta: "O escritor Paulo Coelho é autor do livro 'O Alquimista'.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O Modernismo foi um movimento artístico do século XX.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O escritor russo Liev Tolstói escreveu 'Crime e Castigo'.", correta: "Falso", opcoes: ["Verdadeiro", "Falso"], explicacao: "'Crime e Castigo' foi escrito por Fiódor Dostoiévski." },
+    { pergunta: "O grafite é considerado uma manifestação da arte urbana.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O escritor Franz Kafka escreveu 'A Metamorfose'.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O samba é um ritmo musical que se desenvolveu no Brasil, com influências africanas.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O escritor José de Alencar escreveu 'Senhora' e 'Iracema'.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O festival de Parintins acontece no estado do Amazonas.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] },
+    { pergunta: "O escritor português Eça de Queirós escreveu 'O Primo Basílio'.", correta: "Verdadeiro", opcoes: ["Verdadeiro", "Falso"] }
   ]
 };
 
-// Função para mostrar a tela de seleção de temas
 function mostrarTemas() {
   ocultarTelas();
   document.getElementById('tela-temas').classList.remove('oculto');
 }
 
-// Função para escolher o tema
 function escolherTema(tema) {
   temaSelecionado = tema;
   ocultarTelas();
-  document.getElementById('tela-tipo-pergunta').classList.remove('oculto'); // Mostra a tela de tipo de pergunta
+  document.getElementById('tela-tipo-pergunta').classList.remove('oculto');
 }
 
-// Função para selecionar 15 perguntas aleatórias com base no tema
 function selecionarPerguntasAleatorias() {
   let perguntasSelecionadas = [];
-  const bancoAtual = tipoPergunta === 'verdadeiro-falso' ? bancoPerguntasVF : bancoPerguntas; // Escolhe o banco correto
+  const bancoAtual = tipoPergunta === 'verdadeiro-falso' ? bancoPerguntasVF : bancoPerguntas;
 
   if (temaSelecionado === 'geral') {
-    // Combina todas as perguntas de todos os temas
     const todasPerguntas = Object.values(bancoAtual).flat();
     perguntasSelecionadas = [...todasPerguntas];
   } else {
     perguntasSelecionadas = [...bancoAtual[temaSelecionado]];
   }
 
-  perguntasSelecionadas.sort(() => Math.random() - 0.5); // Embaralha as perguntas
-  return perguntasSelecionadas.slice(0, 10); // Seleciona as 10 primeiras
+  perguntasSelecionadas.sort(() => Math.random() - 0.5);
+  return perguntasSelecionadas.slice(0, 10);
 }
 
-// Atualize a função iniciarComCadastro para mostrar a tela de temas
 function iniciarComCadastro() {
   const nomeInput = document.getElementById('nome').value.trim();
   const turmaInput = document.getElementById('turma').value.trim();
   if (nomeInput === '' || turmaInput === '') {
-      alert('Preencha o nome e a turma.');
+      exibirAlerta('Preencha o nome e a turma.');
       return;
   }
   nomeUsuario = nomeInput;
   turmaUsuario = turmaInput;
-  mostrarTemas(); // Mostra a tela de seleção de temas
+  mostrarTemas();
 }
 
-// Função para iniciar o quiz
 function iniciarQuiz() {
-    // Captura o tipo de pergunta selecionado no <select>
     tipoPergunta = document.getElementById('tipo-pergunta').value;
 
-    perguntas = selecionarPerguntasAleatorias(); // Seleciona 10 perguntas aleatórias
+    perguntas = selecionarPerguntasAleatorias();
     perguntaAtual = 0;
     pontuacao = 0;
+    pulosRestantes = 3;
+    quizPersonalizadoAtivo = false;
     ocultarTelas();
     document.getElementById('tela-quiz').classList.remove('oculto');
-    
-    // Mostra nome, turma e tema
     document.getElementById('usuario-info').innerText = `Jogador: ${nomeUsuario} | Turma: ${turmaUsuario} | Tema: ${temaSelecionado.charAt(0).toUpperCase() + temaSelecionado.slice(1)}`;
-
     mostrarPergunta();
 }
 
-// Função para mostrar a pergunta atual
 function mostrarPergunta() {
-  if (perguntaAtual >= perguntas.length) { // Usa o array `perguntas` com 15 perguntas
-    mostrarResultado();
-    return;
-  }
+  const perguntaEl = document.getElementById('pergunta');
+  const opcoesEl = document.getElementById('opcoes');
+  const btnPular = document.getElementById('btn-pular');
 
-  const p = perguntas[perguntaAtual]; // Obtém a pergunta atual do array `perguntas`
-  document.getElementById('pergunta').innerText = p.pergunta;
-
-  const opcoesDiv = document.getElementById('opcoes');
-  opcoesDiv.innerHTML = '';
-
-  // Exibe as opções com base no tipo de pergunta
-  if (tipoPergunta === 'verdadeiro-falso') {
-    ['Verdadeiro', 'Falso'].forEach(opcao => {
-      const btn = document.createElement('button');
-      btn.innerText = opcao;
-      btn.onclick = () => verificarResposta(opcao);
-      opcoesDiv.appendChild(btn);
-    });
+  // Esconde o botão de pular no quiz personalizado
+  if (quizPersonalizadoAtivo) {
+    btnPular.style.display = 'none';
   } else {
-    p.opcoes.forEach(opcao => {
-      const btn = document.createElement('button');
-      btn.innerText = opcao;
-      btn.onclick = () => verificarResposta(opcao);
-      opcoesDiv.appendChild(btn);
-    });
+    btnPular.style.display = '';
   }
 
-  document.getElementById('progresso').innerText = `Pergunta ${perguntaAtual + 1} de ${perguntas.length}`;
+  perguntaEl.classList.remove('fade-in');
+  opcoesEl.classList.remove('fade-in');
+  perguntaEl.classList.add('fade-out');
+  opcoesEl.classList.add('fade-out');
+
+  setTimeout(() => {
+    perguntaEl.classList.remove('fade-out');
+    opcoesEl.classList.remove('fade-out');
+
+    if (perguntaAtual >= perguntas.length) {
+      mostrarResultado();
+      return;
+    }
+
+    const p = perguntas[perguntaAtual];
+    perguntaEl.innerText = p.pergunta;
+    atualizarProgresso();
+    opcoesEl.innerHTML = '';
+
+    if (tipoPergunta === 'verdadeiro-falso') {
+      ['Verdadeiro', 'Falso'].forEach(opcao => {
+        const btn = document.createElement('button');
+        btn.innerText = opcao;
+        btn.onclick = () => verificarResposta(opcao);
+        opcoesEl.appendChild(btn);
+      });
+    } else {
+      p.opcoes.forEach(opcao => {
+        const btn = document.createElement('button');
+        btn.innerText = opcao;
+        btn.onclick = () => verificarResposta(opcao);
+        opcoesEl.appendChild(btn);
+      });
+    }
+
+    document.getElementById('progresso').innerText = `Pergunta ${perguntaAtual + 1} de ${perguntas.length}`;
+    document.getElementById('btn-pular').innerText = `Pular Pergunta (${pulosRestantes})`;
+    document.getElementById('btn-pular').disabled = pulosRestantes === 0;
+
+    perguntaEl.classList.add('fade-in');
+    opcoesEl.classList.add('fade-in');
+    setTimeout(() => {
+      perguntaEl.classList.remove('fade-in');
+      opcoesEl.classList.remove('fade-in');
+    }, 400);
+  }, 350);
 }
 
-// Função para verificar a resposta
 function verificarResposta(respostaSelecionada) {
-  const p = perguntas[perguntaAtual]; // Obtém a pergunta atual
+  const p = perguntas[perguntaAtual];
   const botoes = document.querySelectorAll('#opcoes button');
   const opcoesDiv = document.getElementById('opcoes');
 
-  // Verifica as respostas e aplica as classes corretas
+  document.getElementById('btn-pular').disabled = true;
+
   botoes.forEach(btn => {
+    btn.disabled = true;
+
     if (btn.innerText === p.correta) {
-      btn.classList.add('correta'); // Marca a resposta correta
+      btn.classList.add('correta');
+      setTimeout(() => btn.classList.remove('pulse-correta'), 500);
     } else if (btn.innerText === respostaSelecionada) {
-      btn.classList.add('errada'); // Marca a resposta errada
+      btn.classList.add('errada');
+      setTimeout(() => btn.classList.remove('pulse-errada'), 500);
     }
-    btn.disabled = true; // Desativa todos os botões após a resposta
   });
 
-  // Incrementa a pontuação se a resposta estiver correta
   if (respostaSelecionada === p.correta) {
     pontuacao++;
   } else if (p.explicacao) {
-    // Exibe a explicação caso o usuário erre
     const explicacao = document.createElement('p');
     explicacao.innerText = `Explicação: ${p.explicacao}`;
     explicacao.style.color = 'white';
@@ -862,11 +889,10 @@ function verificarResposta(respostaSelecionada) {
     opcoesDiv.appendChild(explicacao);
   }
 
-  // Adiciona o botão "Próxima"
-  if (!document.querySelector('.botao-proxima')) { // Evita criar múltiplos botões
+  if (!document.querySelector('.botao-proxima')) {
     const botaoProxima = document.createElement('button');
     botaoProxima.innerText = 'Próxima';
-    botaoProxima.classList.add('botao-proxima'); // Aplica a classe CSS
+    botaoProxima.classList.add('botao-proxima');
     botaoProxima.style.marginTop = '50px';
     botaoProxima.onclick = () => {
       perguntaAtual++;
@@ -876,29 +902,45 @@ function verificarResposta(respostaSelecionada) {
   }
 }
 
-// Função para mostrar o resultado final
 function mostrarResultado() {
-    ocultarTelas();
-    document.getElementById('tela-resultado').classList.remove('oculto');
-    document.getElementById('pontuacao-final').innerText = `Você acertou ${pontuacao} de ${perguntas.length}`;
-    let msg = '';
-    if (pontuacao >= 8) msg = 'Parabéns!';
-    else if (pontuacao >= 5) msg = 'Quase lá!';
-    else msg = 'Continue tentando!';
-    document.getElementById('mensagem-final').innerText = msg;
-    salvarRanking();
+  ocultarTelas();
+  document.getElementById('tela-resultado').classList.remove('oculto');
+  document.getElementById('pontuacao-final').innerText = `Você acertou ${pontuacao} de ${perguntas.length}`;
+  let msg = '';
+  if (pontuacao >= 8) msg = 'Parabéns!';
+  else if (pontuacao >= 5) msg = 'Quase lá!';
+  else msg = 'Continue tentando!';
+  document.getElementById('mensagem-final').innerText = msg;
+  salvarRanking();
+
+  const btnJogarNovamente = document.querySelector('#tela-resultado button[onclick="reiniciar()"]');
+  if (quizPersonalizadoAtivo) {
+    btnJogarNovamente.style.display = 'none';
+  } else {
+    btnJogarNovamente.style.display = '';
+  }
 }
 
-// Funções auxiliares
 function mostrarCadastro() {
     ocultarTelas();
     document.getElementById('tela-cadastro').classList.remove('oculto');
 }
 
 function mostrarRanking() {
-    ocultarTelas();
-    document.getElementById('tela-ranking').classList.remove('oculto');
-    carregarRanking();
+  ocultarTelas();
+  document.getElementById('tela-ranking').classList.remove('oculto');
+  const ranking = JSON.parse(localStorage.getItem('ranking') || '[]'); // Corrigido aqui!
+  const lista = document.getElementById('lista-ranking');
+  lista.innerHTML = '';
+  // Ordena do maior para o menor
+  ranking.sort((a, b) => b.pontos - a.pontos);
+  ranking.forEach((item, i) => {
+    let medalha = '';
+    if (i === 0) medalha = '<i class="fas fa-medal" style="color:gold"></i> ';
+    else if (i === 1) medalha = '<i class="fas fa-medal" style="color:silver"></i> ';
+    else if (i === 2) medalha = '<i class="fas fa-medal" style="color:#cd7f32"></i> ';
+    lista.innerHTML += `<li>${medalha}<b>${item.nome}</b> (${item.turma}) - <b>${item.pontos} pts</b></li>`;
+  });
 }
 
 function ocultarTelas() {
@@ -906,9 +948,10 @@ function ocultarTelas() {
 }
 
 function reiniciar() {
-    perguntas = selecionarPerguntasAleatorias(); // Seleciona novas 15 perguntas
+    perguntas = selecionarPerguntasAleatorias();
     perguntaAtual = 0;
     pontuacao = 0;
+    pulosRestantes = 3;
     ocultarTelas();
     document.getElementById('tela-quiz').classList.remove('oculto');
     mostrarPergunta();
@@ -920,13 +963,17 @@ function voltarInicio() {
 }
 
 function salvarRanking() {
-    const ranking = JSON.parse(localStorage.getItem('rankingQuiz') || '[]');
-    ranking.push({ nome: nomeUsuario, turma: turmaUsuario, pontuacao });
-    localStorage.setItem('rankingQuiz', JSON.stringify(ranking));
+    let ranking = JSON.parse(localStorage.getItem('ranking')) || [];
+    ranking.push({
+    nome: nomeUsuario,
+    turma: turmaUsuario,
+    pontos: pontuacao // <-- Certifique-se que é 'pontos'
+});
+localStorage.setItem('ranking', JSON.stringify(ranking));
 }
 
 function carregarRanking() {
-    const ranking = JSON.parse(localStorage.getItem('rankingQuiz') || '[]');
+    const ranking = JSON.parse(localStorage.getItem('ranking') || '[]');
     const lista = document.getElementById('lista-ranking');
     lista.innerHTML = '';
     ranking.sort((a, b) => b.pontuacao - a.pontuacao);
@@ -935,4 +982,148 @@ function carregarRanking() {
         li.innerText = `${index + 1}. ${item.nome} (${item.turma}) - ${item.pontuacao} pts`;
         lista.appendChild(li);
     });
+}
+
+function mostrarCriarQuiz() {
+  ocultarTelas();
+  document.getElementById('tela-criar-quiz').classList.remove('oculto');
+  document.getElementById('perguntas-criadas').innerHTML = '';
+}
+
+function mostrarEntrarQuiz() {
+  ocultarTelas();
+  document.getElementById('tela-entrar-quiz').classList.remove('oculto');
+}
+
+let quizPersonalizado = { titulo: '', perguntas: [] };
+
+function adicionarPergunta() {
+  const idx = quizPersonalizado.perguntas.length;
+  const div = document.createElement('div');
+  div.innerHTML = `
+    <input type="text" placeholder="Pergunta" id="pergunta${idx}">
+    <input type="text" placeholder="Opção 1" id="op1_${idx}">
+    <input type="text" placeholder="Opção 2" id="op2_${idx}">
+    <input type="text" placeholder="Opção 3" id="op3_${idx}">
+    <input type="text" placeholder="Opção 4" id="op4_${idx}">
+    <input type="text" placeholder="Resposta Correta" id="correta_${idx}">
+    <hr>
+  `;
+  document.getElementById('perguntas-criadas').appendChild(div);
+  quizPersonalizado.perguntas.push({});
+}
+
+function salvarQuizPersonalizado() {
+  quizPersonalizado.titulo = document.getElementById('titulo-quiz').value;
+  quizPersonalizado.perguntas = [];
+  const perguntasDivs = document.querySelectorAll('#perguntas-criadas > div');
+  perguntasDivs.forEach((div, idx) => {
+    quizPersonalizado.perguntas.push({
+      pergunta: div.querySelector(`#pergunta${idx}`).value,
+      opcoes: [
+        div.querySelector(`#op1_${idx}`).value,
+        div.querySelector(`#op2_${idx}`).value,
+        div.querySelector(`#op3_${idx}`).value,
+        div.querySelector(`#op4_${idx}`).value
+      ],
+      correta: div.querySelector(`#correta_${idx}`).value
+    });
+  });
+  const codigo = 'quiz_' + Date.now();
+  localStorage.setItem(codigo, JSON.stringify(quizPersonalizado));
+  exibirAlerta(`Quiz salvo! Compartilhe este código: ${codigo}`);
+  voltarInicio();
+}
+
+function carregarQuizPersonalizado() {
+  const codigo = document.getElementById('codigo-quiz').value.trim();
+  const quiz = localStorage.getItem(codigo);
+  if (!quiz) {
+    exibirAlerta('Quiz não encontrado!');
+    return;
   }
+  perguntas = JSON.parse(quiz).perguntas;
+  perguntaAtual = 0;
+  pontuacao = 0;
+  pulosRestantes = 3;
+  quizPersonalizadoAtivo = true; // <-- Ativa o modo personalizado
+  ocultarTelas();
+  document.getElementById('tela-quiz').classList.remove('oculto');
+  document.getElementById('usuario-info').innerText = `Jogador: ${nomeUsuario}`;
+  mostrarPergunta();
+  window.quizPersonalizadoTemp = quiz;
+  ocultarTelas();
+  document.getElementById('tela-cadastro-personalizado').classList.remove('oculto');
+}
+
+function exibirAlerta(mensagem) {
+  const alerta = document.getElementById('alerta');
+  alerta.textContent = mensagem;
+  alerta.classList.remove('oculto');
+
+  setTimeout(() => {
+    alerta.classList.add('oculto');
+  }, 7000);
+}
+
+function pularPergunta() {
+  if (pulosRestantes > 0) {
+    pulosRestantes--;
+
+    const perguntasUsadas = perguntas.map(p => p.pergunta);
+
+    let bancoAtual = tipoPergunta === 'verdadeiro-falso' ? bancoPerguntasVF : bancoPerguntas;
+    let todasPerguntas = temaSelecionado === 'geral'
+      ? Object.values(bancoAtual).flat()
+      : bancoAtual[temaSelecionado];
+
+    let perguntasDisponiveis = todasPerguntas.filter(p => !perguntasUsadas.includes(p.pergunta));
+
+    if (perguntasDisponiveis.length > 0) {
+      let novaPergunta = perguntasDisponiveis[Math.floor(Math.random() * perguntasDisponiveis.length)];
+      perguntas[perguntaAtual] = novaPergunta;
+      mostrarPergunta();
+    } else {
+      perguntaAtual++;
+      if (perguntaAtual < perguntas.length) {
+        mostrarPergunta();
+      } else {
+        mostrarResultado();
+      }
+    }
+  }
+}
+
+function atualizarProgresso() {
+  const progresso = document.getElementById('progresso');
+  progresso.textContent = `Pergunta ${perguntaAtual + 1} de ${perguntas.length}`;
+  // Atualiza barra visual
+  const barra = document.getElementById('progresso-barra-preenchido');
+  const percentual = ((perguntaAtual + 1) / perguntas.length) * 100;
+  barra.style.width = percentual + '%';
+}
+
+function limparRanking() {
+  localStorage.removeItem('ranking');
+  localStorage.removeItem('ranking');
+  exibirAlerta('Ranking limpo!');
+}
+
+function iniciarQuizPersonalizado() {
+  const nome = document.getElementById('nome-personalizado').value.trim();
+  if (!nome) {
+    exibirAlerta('Você precisa informar um nome para jogar!');
+    return;
+  }
+  nomeUsuario = nome;
+  const quiz = JSON.parse(window.quizPersonalizadoTemp);
+  perguntas = quiz.perguntas;
+  perguntaAtual = 0;
+  pontuacao = 0;
+  pulosRestantes = 3;
+  quizPersonalizadoAtivo = true;
+  ocultarTelas();
+  document.getElementById('tela-quiz').classList.remove('oculto');
+  document.getElementById('usuario-info').innerText = `Jogador: ${nomeUsuario}`;
+  mostrarPergunta();
+}
