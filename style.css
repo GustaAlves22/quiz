@@ -153,7 +153,8 @@ body {
 }
 
 .errada {
-  color: #fff !important;
+  background-color: #e53935 !important; 
+  color: #ffffff !important;
 }
 
 #progresso {
@@ -316,7 +317,7 @@ body {
 }
 
 /* Ícones só nas laterais */
-.livro1   { left: 2vw;  top: 6vh;  animation-delay: 0s; }
+.livro1   { left: 2vw;  top: 6vh;  animation-delay: 2s; }
 .chapeu1  { left: 85vw; top: 8vh;  animation-delay: 2s; }
 .lapis1   { left: 4vw;  top: 80vh; animation-delay: 4s; }
 .lampada1 { left: 90vw; top: 70vh; animation-delay: 6s; }
@@ -324,6 +325,15 @@ body {
 .maca1    { left: 88vw; top: 20vh; animation-delay: 10s; }
 .globo1   { left: 90vw; top: 40vh; animation-delay: 12s; }
 .livro2   { left: 3vw;  top: 30vh; animation-delay: 14s; }
+
+/* Ajuste: topo mais para baixo e sem dois livros juntos */
+.livro-top   { left: 15vw; top: 45vh;  animation-delay: 1s; }
+.chapeu-top  { left: 40vw; top: 6vh;  animation-delay: 3s; }
+.lampada-top { left: 75vw; top: 43vh;  animation-delay: 5s; }
+
+.regua-bottom { left: 10vw; bottom: 0vh; animation-delay: 7s; }
+.maca-bottom  { left: 45vw; bottom: 4vh; animation-delay: 9s; }
+.globo-bottom { left: 73vw; bottom: 10vh; animation-delay: 11s; }
 
 @keyframes flutuar {
   0% { transform: translateY(0) scale(1);}
